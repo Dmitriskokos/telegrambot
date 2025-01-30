@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}Add Employee{% endblock %}
+
+{% block page_title %}Add Employee{% endblock %}
+
+{% block content %}
+    
+    <div class="modal fade show" id="addEmployeeModal" tabindex="-1" aria-labelledby="addEmployeeModalLabel" aria-modal="true" role="dialog" style="display: block;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addEmployeeModalLabel">Добавить нового сотрудника</h5>
+                </div>
+                <div class="modal-body">
+                  
+                    <form method="post" action="/add_employee">
+                         <div class="mb-3">
+                            <label for="username" class="form-label">Логин</label>
+                            <input type="text" class="form-control" id="username" name="username" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Пароль</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                        </div>
+                         <div class="mb-3">
+                            <label for="role" class="form-label">Роль</label>
+                           <select class="form-select" id="role" name="role" required>
+                              <option value="samurai">Самурай</option>
+                                <option value="ninja">Ниндзя</option>
+                           </select>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="button button-primary">Добавить</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+{% endblock %}

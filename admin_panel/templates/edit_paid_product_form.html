@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Редактировать закладку - {{ product.product_name }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Ваши стили из paid_products_product.html */
+        body {
+            font-family: sans-serif;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .form-label {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+        .form-control, .form-select {
+            margin-bottom: 1rem;
+            padding: 0.5rem 0.75rem;
+            border: 1px solid #ced4da;
+            border-radius: 0.25rem;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .image-preview-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .image-preview {
+            width: 100px;
+            height: 100px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .image-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <h1>Редактировать закладку - {{ product.product_name }}</h1>
+        <form id="editLocationForm" method="POST" action="/update-paid-product/{{ product.id }}" enctype="multipart/form-data">
+            <input type="hidden" name="category" value="{{ product.category_name }}">
+            <input type="hidden" name="product_name" value="{{ product.product_name }}">
+
+            <div class="mb-3">
+                <label for="citySelect" class="form-label">Город</label>
+                <select id="citySelect" class="form-select location-city" name="city" required>
+                    <option value="" disabled>Выберите город</option>
+                    {% for city, districts in locations.items() %}
+                        <option value="{{ city }}" {% if city == product.city %}selected{% endif %}>{{ city }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="districtSelect" class="form-label">Район</label>
+                <select id="districtSelect" class="form-select location-district" name="district" required>
+                    <option value="" disabled>Выберите район</option>
+                    {% for district in locations.get(product.city, []) %}
+                        <option value="{{ district }}" {% if district == product.district %}selected{% endif %}>{{ district }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="instruction" class="form-label">Инструкция</label>
+                <textarea id="instruction" class="form-control" name="instruction" rows="2" required>{{ product.instruction }}</textarea>
+            </div>
+
+            <div class="mb-3">
+                <label for="imageUpload" class="form-label">Фотографии</label>
+                <input type="file" id="imageUpload" class="form-control image-upload" name="images" multiple accept="image/*">
+                <div class="image-preview-container mt-3">
+                    {% for image_path in product.images %}
+                        <div class="image-preview">
+                            <img src="{{ url_for('serve_images', filename=image_path.split('/')[-1]) }}" alt="Image">
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+            <a href="/paid-products/{{ product.category_name }}/{{ product.product_name }}" class="btn btn-secondary">Отмена</a>
+        </form>
+    </div>
+
+    <script>
+        const locationsData = {{ locations|tojson|safe }};
+        const citySelect = document.getElementById('citySelect');
+        const districtSelect = document.getElementById('districtSelect');
+        const imageUpload = document.getElementById('imageUpload');
+        const imagePreviewContainer = document.querySelector('.image-preview-container');
+
+        citySelect.addEventListener('change', () => {
+            const selectedCity = citySelect.value;
+            districtSelect.innerHTML = '<option value="" disabled selected>Выберите район</option>';
+            if (locationsData[selectedCity]) {
+                locationsData[selectedCity].forEach(district => {
+                    const option = document.createElement('option');
+                    option.value = district;
+                    option.textContent = district;
+                    districtSelect.appendChild(option);
+                });
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (citySelect.value) {
+                citySelect.dispatchEvent(new Event('change'));
+            }
+        });
+
+        imageUpload.addEventListener('change', () => {
+            imagePreviewContainer.innerHTML = '';
+            const files = Array.from(imageUpload.files);
+            files.forEach(file => {
+                const previewDiv = document.createElement('div');
+                previewDiv.classList.add('image-preview');
+
+                const img = document.createElement('img');
+                img.src = URL.createObjectURL(file);
+                img.alt = 'Image Preview';
+
+                img.onload = () => {
+                    URL.revokeObjectURL(img.src);
+                }
+
+                previewDiv.appendChild(img);
+                imagePreviewContainer.appendChild(previewDiv);
+            });
+        });
+    </script>
+</body>
+</html>

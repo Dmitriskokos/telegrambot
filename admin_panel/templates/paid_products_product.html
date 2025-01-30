@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Редактор закладок - {{ product_name }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Общие стили */
+        body {
+            font-family: sans-serif;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Стили для навигации */
+        .header-navigation {
+            display: flex;
+            gap: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 20px;
+            flex-direction: column;
+            align-items: stretch; /* Stretch items to full width */
+        }
+
+        /* Стили для формы добавления закладок */
+        #locationForm {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 0.5rem; /* Consistent with product card */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        .form-label {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+        .form-control, .form-select {
+            margin-bottom: 1rem;
+            padding: 0.5rem 0.75rem;
+            border: 1px solid #ced4da;
+            border-radius: 0.25rem;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        /* Стили для превью изображений в форме */
+        .image-preview-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .image-preview {
+            width: 80px;
+            height: 80px;
+            border: 1px solid #ddd;
+            border-radius: 0.25rem; /* Consistent with form controls */
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .image-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+       /* Стили для добавленных закладок (как карточки товаров) */
+        .location-grid {
+            display: flex;
+            flex-wrap: wrap; /* Allow items to wrap to the next line */
+            gap: 20px;
+            margin-bottom: 20px;
+             justify-content: flex-start;
+        }
+
+        .location-card {
+             border: 1px solid #dee2e6;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+             transition: transform 0.2s ease-in-out;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+           flex: 0 0 calc(25.00% - 20px); /* Initial width with margin */
+            max-width: calc(25.00% - 20px);
+        }
+        .location-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .location-image {
+            width: 100%;
+            height: 200px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .location-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .location-card-body {
+            padding: 1rem;
+            flex-grow: 1;
+        }
+        .location-card-body h3 {
+            margin-top: 0;
+            margin-bottom: 0.75rem;
+            font-size: 1.25rem;
+        }
+        .location-card-body p {
+            margin-bottom: 0.75rem;
+        }
+         .location-card-footer {
+           background-color: #f8f9fa;
+            padding: 0.5rem;
+            text-align: center;
+        }
+
+        /* Стили для кнопки удаления */
+        .delete-location-btn {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.25rem;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
+            width: 100%; /* Make the button full width in the footer */
+        }
+        .delete-location-btn:hover {
+            background-color: #bd2130;
+        }
+        .btn-group {
+            flex-wrap: wrap; /* Для адаптации кнопок */
+        }
+        .btn-group .btn {
+            margin: 0.2rem; /* Расстояние между кнопками */
+        }
+         @media (max-width: 768px) {
+            .location-card {
+               flex: 0 0 100%;
+               max-width: 100%;
+            }
+             .header-navigation {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <nav class="header-navigation">
+            <h1>Редактор закладок для товара - {{ product_name }}</h1>
+
+              <div class="btn-group d-flex mb-3" role="group">
+                <button onclick="history.back()" class="btn btn-success w-100">Назад</button>
+            </div>
+        </nav>
+        <div class="container">
+            <form id="locationForm" class="mb-5">
+                <input type="hidden" name="category" value="{{ category_name }}">
+                <input type="hidden" name="product_name" value="{{ product_name }}">
+                 <input type="hidden" id="basePrice" value="{{ product_price }}">
+                 <input type="hidden" id="product_id" value="{{ product_id }}">
+
+                <div class="mb-3">
+                    <label for="citySelect" class="form-label">Город</label>
+                    <select id="citySelect" class="form-select location-city" name="city" required>
+                        <option value="" disabled selected>Выберите город</option>
+                        {% for city, districts in locations.items() %}
+                            <option value="{{ city }}">{{ city }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="districtSelect" class="form-label">Район</label>
+                    <select id="districtSelect" class="form-select location-district" name="district" required>
+                        <option value="" disabled selected>Выберите район</option>
+                    </select>
+                </div>
+
+                  <div class="mb-3" id="gramSelector" style="display: none;">
+                    <label for="gram" class="form-label">Граммовка</label>
+                    <select class="form-control" id="gram" name="gram">
+                         <option value="1">1гр</option>
+                         <option value="2">2гр</option>
+                         <option value="5">5гр</option>
+                         <option value="10">10гр</option>
+                    </select>
+                 </div>
+
+                 <div class="mb-3" id="itemSelector" style="display: none;">
+                     <label for="item" class="form-label">Штук</label>
+                     <select class="form-control" id="item" name="item">
+                         <option value="1">1шт</option>
+                         <option value="2">2шт</option>
+                         <option value="5">5шт</option>
+                         <option value="10">10шт</option>
+                         <option value="20">20шт</option>
+                          <option value="50">50шт</option>
+                     </select>
+                 </div>
+                    <div class="mb-3">
+                        <label for="productPriceInput" class="form-label">Цена:</label>
+                        <input type="number" id="productPriceInput" class="form-control"  name="productPrice" step="0.01" min="0"  placeholder="Цена"  pattern="^\d+(\.\d{0,2})?$" value="{% if product_price %}{{ product_price }}{% endif %}">
+                    </div>
+                <div class="mb-3">
+                    <label for="instruction" class="form-label">Корды</label>
+                    <textarea id="instruction" class="form-control" name="instruction" rows="2" required></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label for="imageUpload" class="form-label">Фотки</label>
+                    <input type="file" id="imageUpload" class="form-control image-upload" name="images" multiple accept="image/*">
+                    <div class="image-preview-container mt-3"></div>
+                </div>
+
+                <button type="button" class="btn btn-primary" onclick="saveLocation()">Сохранить</button>
+            </form>
+
+            <h2>Добавленные клады</h2>
+            <div class="location-grid" id="locationGrid">
+                {% for location in paid_products %}
+                    <div class="location-card" id="location-card-{{ location.id }}">
+                        <div class="location-image">
+                            {% if location.images %}
+                                <img src="{{ url_for('serve_images', filename=location.images[0].split('/')[-1]) }}" alt="Image">
+                            {% endif %}
+                        </div>
+                        <div class="location-card-body">
+                            <h3>Город: {{ location.city }}</h3>
+                            <h3>Район: {{ location.district }}</h3>
+                             {% if location.gram %}
+                                <p><strong>Граммовка:</strong> {{ location.gram }}гр</p>
+                             {% endif %}
+                              {% if location.item %}
+                                <p><strong>Штук:</strong> {{ location.item }}шт</p>
+                              {% endif %}
+                            <p><strong>Цена:</strong> <span id="location-price-{{ location.id }}">{{ location.price }}</span> USDT</p>
+                            <p><strong>Корды:</strong> <span id="location-instruction-{{ location.id }}">{{ location.instruction }}</span></p>
+                        </div>
+                         <div class="location-card-footer d-grid gap-2">
+                                <button class="btn btn-warning edit-location-btn w-100" data-location-id="{{ location.id }}" data-table-name="{{ location.table_name }}" data-city="{{ location.city }}" data-district="{{ location.district }}">Редактировать</button>
+                                <button class="btn btn-danger delete-location-btn w-100" data-location-id="{{ location.id }}" data-table-name="{{ location.table_name }}">Удалить</button>
+                         </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const deleteButtons = document.querySelectorAll('.delete-location-btn');
+                deleteButtons.forEach(button => {
+                    button.addEventListener('click', function() {
+                        const locationId = this.dataset.locationId;
+                        const tableName = this.dataset.tableName;
+                       deleteLocation(locationId, tableName);
+                    });
+                });
+
+                const editButtons = document.querySelectorAll('.edit-location-btn');
+                editButtons.forEach(button => {
+                    button.addEventListener('click', function() {
+                        const locationId = this.dataset.locationId;
+                        const tableName = this.dataset.tableName;
+                        const city = this.dataset.city;
+                        const district = this.dataset.district;
+                        enableLocationEditMode(locationId, tableName, city, district);
+                    });
+                });
+            });
+
+              async function deleteLocation(locationId, tableName) {
+                try {
+                    const response = await fetch(`/delete-paid-product/${locationId}/${tableName}`, {
+                        method: 'DELETE',
+                    });
+
+                    if (response.ok) {
+                        console.log(`Закладка с ID ${locationId} удалена из таблицы ${tableName}`);
+                        const cardToRemove = document.getElementById(`location-card-${locationId}`);
+                        if (cardToRemove) {
+                            cardToRemove.remove();
+                        }
+                    } else {
+                        console.error('Ошибка при удалении закладки:', response.status);
+                        alert('Произошла ошибка при удалении закладки.');
+                    }
+                } catch (error) {
+                    console.error('Ошибка при отправке запроса на удаление:', error);
+                    alert('Произошла ошибка при удалении закладки.');
+                }
+            }
+
+             const productId = document.getElementById('product_id').value;
+                const gramSelector = document.getElementById('gramSelector');
+                const itemSelector = document.getElementById('itemSelector');
+                 const basePrice = parseFloat(document.getElementById('basePrice').value);
+                 let currentSelector = null;
+
+
+            function updatePrice() {
+                let selectedValue = 1;
+                if (currentSelector === 'gram') {
+                     selectedValue = parseInt(document.getElementById('gram').value, 10); // Изменено на parseInt
+                } else if (currentSelector === 'item') {
+                   selectedValue = parseInt(document.getElementById('item').value, 10);
+                }
+               const newPrice = basePrice * selectedValue;
+               const productPriceInput = document.getElementById('productPriceInput');
+               productPriceInput.value = newPrice.toFixed(2);
+            }
+
+             function showCorrectSelector(productId){
+                const gramProducts = [1, 3, 4, 5, 6, 7, 12, 13, 14, 15];
+                const itemProducts = [2, 8, 9, 10, 11];
+
+                if (gramProducts.includes(parseInt(productId))) {
+                     gramSelector.style.display = 'block';
+                     itemSelector.style.display = 'none';
+                      currentSelector = 'gram';
+                     updatePrice()
+                    document.getElementById('gram').addEventListener('change', updatePrice)
+                } else if (itemProducts.includes(parseInt(productId))) {
+                     itemSelector.style.display = 'block';
+                     gramSelector.style.display = 'none';
+                     currentSelector = 'item'
+                     updatePrice()
+                     document.getElementById('item').addEventListener('change', updatePrice)
+                }
+                 else{
+                     itemSelector.style.display = 'none';
+                      gramSelector.style.display = 'none';
+                     currentSelector = null;
+                }
+               }
+
+              showCorrectSelector(productId)
+            const locationsData = {{ locations|tojson|safe }};
+            const citySelect = document.getElementById('citySelect');
+            const districtSelect = document.getElementById('districtSelect');
+            const imageUpload = document.getElementById('imageUpload');
+            const imagePreviewContainer = document.querySelector('.image-preview-container');
+
+            citySelect.addEventListener('change', () => {
+                const selectedCity = citySelect.value;
+                districtSelect.innerHTML = '<option value="" disabled selected>Выберите район</option>';
+                if (locationsData[selectedCity]) {
+                    locationsData[selectedCity].forEach(district => {
+                        const option = document.createElement('option');
+                        option.value = district;
+                        option.textContent = district;
+                        districtSelect.appendChild(option);
+                    });
+                }
+            });
+
+            document.addEventListener('DOMContentLoaded', () => {
+                if (citySelect.value) {
+                    citySelect.dispatchEvent(new Event('change'));
+                }
+            });
+
+            imageUpload.addEventListener('change', () => {
+                imagePreviewContainer.innerHTML = '';
+                const files = Array.from(imageUpload.files);
+                files.forEach(file => {
+                    const previewDiv = document.createElement('div');
+                    previewDiv.classList.add('image-preview');
+
+                    const img = document.createElement('img');
+                    img.src = URL.createObjectURL(file);
+                    img.alt = 'Image Preview';
+
+                    img.onload = () => {
+                        URL.revokeObjectURL(img.src);
+                    }
+
+                    previewDiv.appendChild(img);
+                    imagePreviewContainer.appendChild(previewDiv);
+                });
+            });
+
+            async function saveLocation() {
+                console.log('saveLocation function started'); // Проверка вызова функции
+                const form = document.getElementById('locationForm');
+                console.log('Form element:', form); // Проверка получения элемента формы
+                if (!form) {
+                    console.error('Form element not found!');
+                    return;
+                }
+                const data = new FormData(form);
+                console.log('FormData:', data); // Проверка FormData
+
+                const city = document.getElementById('citySelect').value;
+                const district = document.getElementById('districtSelect').value;
+                const instruction = document.getElementById('instruction').value;
+
+                console.log('Form values:', {
+                    category: data.get('category'),
+                    product_name: data.get('product_name'),
+                    city: city,
+                    district: district,
+                    instruction: instruction
+                });
+
+                const imageUpload = document.getElementById('imageUpload');
+                const files = Array.from(imageUpload.files);
+                const base64Images = [];
+
+                for (const file of files) {
+                    const reader = new FileReader();
+                    await new Promise((resolve) => {
+                        reader.onload = () => {
+                            base64Images.push(reader.result);
+                            resolve();
+                        };
+                        reader.readAsDataURL(file);
+                    });
+                }
+
+                let selectedValue = 1;
+                let selectedType = null;
+                if (currentSelector === 'gram') {
+                    selectedValue = parseInt(document.getElementById('gram').value, 10);  // Изменено на parseInt
+                    selectedType = 'gram';
+                } else if (currentSelector === 'item') {
+                    selectedValue = parseInt(document.getElementById('item').value, 10);
+                    selectedType = 'item';
+                }
+                const totalPrice = parseFloat(document.getElementById('productPriceInput').value);
+
+
+                const payload = {
+                    category: data.get('category'),
+                    product_name: data.get('product_name'),
+                    city: city,
+                    district: district,
+                    instruction: instruction,
+                    images: base64Images,
+                    selectedValue: selectedValue,
+                    selectedType: selectedType,
+                     totalPrice: totalPrice
+                };
+
+                console.log('Payload being sent:', payload); // Проверка payload перед отправкой
+
+                try {
+                    const response = await fetch(`/paid-products/${encodeURIComponent(payload.category)}/${encodeURIComponent(payload.product_name)}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (response.ok) {
+                        const result = await response.json();
+                        console.log('Server response:', result);
+                        // alert('Закладка успешно сохранена!'); // Удалено всплывающее окно
+
+                        // Создаем новый элемент закладки и добавляем его в location-grid
+                        const locationGrid = document.getElementById('locationGrid');
+
+                        // Создаем новый location-card
+                        const newCard = document.createElement('div');
+                        newCard.classList.add('location-card');
+                        newCard.id = `location-card-${result.new_location_id}`; // Предполагается, что сервер возвращает новый ID
+
+                        // Создаем содержимое карточки
+                        let imageHtml = '';
+                        if (base64Images.length > 0) {
+                            const imageFilename = base64Images[0].split('/').pop().split(';')[0].split(':').pop(); // Извлекаем имя файла из Base64
+                            imageHtml = `<img src="${base64Images[0]}" alt="Image">`;
+                        }
+
+                        let gramHtml = '';
+                        if (selectedType === 'gram') {
+                            gramHtml = `<p><strong>Граммовка:</strong> ${selectedValue}гр</p>`;
+                        }
+
+                        let itemHtml = '';
+                        if (selectedType === 'item') {
+                            itemHtml = `<p><strong>Штук:</strong> ${selectedValue}шт</p>`;
+                        }
+
+                        newCard.innerHTML = `
+                            <div class="location-image">
+                                ${imageHtml}
+                            </div>
+                            <div class="location-card-body">
+                                <h3>Город: ${city}</h3>
+                                <h3>Район: ${district}</h3>
+                                ${gramHtml}
+                                ${itemHtml}
+                                <p><strong>Цена:</strong> <span id="location-price-${result.new_location_id}">${totalPrice}</span> USDT</p>
+                                <p><strong>Корды:</strong> <span id="location-instruction-${result.new_location_id}">${instruction}</span></p>
+                            </div>
+                             <div class="location-card-footer d-grid gap-2">
+                                <button class="btn btn-warning edit-location-btn w-100" data-location-id="${result.new_location_id}" data-table-name="${payload.selectedType}_${payload.selectedValue}_paid_products" data-city="${city}" data-district="${district}">Редактировать</button>
+                                <button class="btn btn-danger delete-location-btn w-100" data-location-id="${result.new_location_id}" data-table-name="${payload.selectedType}_${payload.selectedValue}_paid_products">Удалить</button>
+                            </div>
+                        `;
+
+                        // Добавляем обработчик события для новой кнопки удаления
+                          const deleteButton = newCard.querySelector('.delete-location-btn');
+                        deleteButton.addEventListener('click', function() {
+                            const locationId = this.dataset.locationId;
+                            const tableName = this.dataset.tableName;
+                            deleteLocation(locationId, tableName);
+                        });
+                         const editButton = newCard.querySelector('.edit-location-btn');
+                            editButton.addEventListener('click', function() {
+                                const locationId = this.dataset.locationId;
+                                const tableName = this.dataset.tableName;
+                                 const city = this.dataset.city;
+                                const district = this.dataset.district;
+                                 enableLocationEditMode(locationId, tableName, city, district);
+                             });
+
+                        // Добавляем карточку в сетку
+                        locationGrid.appendChild(newCard);
+
+                        // Сбрасываем форму
+                        form.reset();
+                        imagePreviewContainer.innerHTML = '';
+                    } else {
+                        console.error('Ошибка при сохранении закладки:', response.status);
+                        const errorData = await response.json();
+                        console.error('Server error details:', errorData);
+                        alert('Произошла ошибка при сохранении закладки.');
+                    }
+
+                } catch (error) {
+                    console.error('Ошибка при сохранении закладки:', error);
+                    alert('Произошла ошибка при сохранении закладки.');
+                }
+            }
+            function enableLocationEditMode(locationId, tableName, currentCity, currentDistrict) {
+                const card = document.getElementById(`location-card-${locationId}`);
+                 const priceElement = document.getElementById(`location-price-${locationId}`);
+                const instructionElement = document.getElementById(`location-instruction-${locationId}`);
+
+                 const currentPrice = priceElement.textContent;
+                const currentInstruction = instructionElement.textContent;
+                
+
+                 priceElement.innerHTML = `<input type="number" class="form-control edit-price-input" value="${currentPrice}" step="0.01" min="0" pattern="^\\d+(\\.\\d{0,2})?$">`;
+                 instructionElement.innerHTML = `<textarea class="form-control edit-instruction-input" rows="2">${currentInstruction}</textarea>`;
+
+                const citySelectEdit = document.createElement('select');
+                citySelectEdit.classList.add('form-select', 'edit-city-select');
+                citySelectEdit.innerHTML = '<option value="" disabled>Выберите город</option>';
+                    for (const city in locationsData) {
+                        const option = document.createElement('option');
+                        option.value = city;
+                        option.textContent = city;
+                          if(city === currentCity){
+                             option.selected = true
+                           }
+                        citySelectEdit.appendChild(option);
+                    }
+
+                const districtSelectEdit = document.createElement('select');
+                districtSelectEdit.classList.add('form-select', 'edit-district-select');
+                districtSelectEdit.innerHTML = '<option value="" disabled>Выберите район</option>';
+                 if (locationsData[currentCity]) {
+                    locationsData[currentCity].forEach(district => {
+                        const option = document.createElement('option');
+                        option.value = district;
+                        option.textContent = district;
+                           if(district === currentDistrict){
+                             option.selected = true
+                           }
+                        districtSelectEdit.appendChild(option);
+                    });
+                 }
+
+
+                const cityDistrictWrapper = document.createElement('div')
+                 cityDistrictWrapper.classList.add('d-flex', 'flex-column', 'gap-2', 'mb-2')
+                cityDistrictWrapper.appendChild(citySelectEdit)
+                 cityDistrictWrapper.appendChild(districtSelectEdit)
+               card.querySelector('.location-card-body').insertBefore(cityDistrictWrapper,  card.querySelector('.location-card-body').firstChild)
+               citySelectEdit.addEventListener('change', () => {
+                    const selectedCity = citySelectEdit.value;
+                    districtSelectEdit.innerHTML = '<option value="" disabled selected>Выберите район</option>';
+                    if (locationsData[selectedCity]) {
+                        locationsData[selectedCity].forEach(district => {
+                            const option = document.createElement('option');
+                            option.value = district;
+                            option.textContent = district;
+                            districtSelectEdit.appendChild(option);
+                        });
+                    }
+                });
+
+                // Создаем кнопки Сохранить и Отмена
+                const saveButton = document.createElement('button');
+                saveButton.textContent = 'Сохранить';
+                saveButton.classList.add('btn', 'btn-success','save-edit-location-btn', 'w-100');
+                const cancelButton = document.createElement('button');
+                 cancelButton.textContent = 'Отмена';
+                cancelButton.classList.add('btn', 'btn-secondary', 'cancel-edit-location-btn', 'w-100');
+                 const footer = card.querySelector('.location-card-footer');
+                footer.innerHTML = '';
+                const buttonsWrapper = document.createElement('div');
+                 buttonsWrapper.classList.add('d-grid', 'gap-2')
+                buttonsWrapper.appendChild(saveButton);
+                 buttonsWrapper.appendChild(cancelButton);
+                 footer.appendChild(buttonsWrapper);
+
+
+                saveButton.addEventListener('click', function() {
+                   const newPrice = card.querySelector('.edit-price-input').value;
+                    const newInstruction = card.querySelector('.edit-instruction-input').value;
+                     const newCity = citySelectEdit.value;
+                     const newDistrict = districtSelectEdit.value;
+                    saveLocationChanges(locationId, tableName, newPrice, newInstruction, newCity, newDistrict);
+                });
+
+                cancelButton.addEventListener('click', function() {
+                    disableLocationEditMode(locationId, tableName, currentPrice, currentInstruction, currentCity, currentDistrict)
+                });
+            }
+            function disableLocationEditMode(locationId, tableName, price, instruction, city, district){
+                 const card = document.getElementById(`location-card-${locationId}`);
+                 const priceElement = document.getElementById(`location-price-${locationId}`);
+                const instructionElement = document.getElementById(`location-instruction-${locationId}`);
+                 priceElement.innerHTML = price;
+                 instructionElement.innerHTML = instruction;
+
+                 const cardBody = card.querySelector('.location-card-body');
+                  // Удаляем обертку для выбора города и района
+                 const cityDistrictWrapper =  cardBody.querySelector('.d-flex');
+                  if(cityDistrictWrapper){
+                      cityDistrictWrapper.remove()
+                  }
+
+
+                 const footer = card.querySelector('.location-card-footer');
+                  footer.innerHTML = `
+                       <button class="btn btn-warning edit-location-btn w-100" data-location-id="${locationId}" data-table-name="${tableName}" data-city="${city}" data-district="${district}">Редактировать</button>
+                        <button class="btn btn-danger delete-location-btn w-100" data-location-id="${locationId}" data-table-name="${tableName}">Удалить</button>
+                   `;
+                const deleteButton = footer.querySelector('.delete-location-btn');
+                    deleteButton.addEventListener('click', function() {
+                        const locationId = this.dataset.locationId;
+                        const tableName = this.dataset.tableName;
+                         deleteLocation(locationId, tableName);
+                });
+                const editButton = footer.querySelector('.edit-location-btn');
+                 editButton.addEventListener('click', function() {
+                            const locationId = this.dataset.locationId;
+                            const tableName = this.dataset.tableName;
+                           const city = this.dataset.city;
+                           const district = this.dataset.district;
+                            enableLocationEditMode(locationId, tableName, city, district);
+                 });
+            }
+
+            async function saveLocationChanges(locationId, tableName, newPrice, newInstruction, newCity, newDistrict) {
+                 try {
+                     const response = await fetch(`/update-paid-product-location/${locationId}/${tableName}`, {
+                         method: 'PUT',
+                         headers: { 'Content-Type': 'application/json' },
+                         body: JSON.stringify({
+                             price: newPrice,
+                             instruction: newInstruction,
+                            city: newCity,
+                            district: newDistrict
+                         })
+                     });
+
+                     if (response.ok) {
+                         const card = document.getElementById(`location-card-${locationId}`);
+                         const priceElement = card.querySelector(`#location-price-${locationId}`);
+                         const instructionElement = card.querySelector(`#location-instruction-${locationId}`);
+                          disableLocationEditMode(locationId, tableName, newPrice, newInstruction, newCity, newDistrict)
+
+                     } else {
+                         console.error('Ошибка при сохранении изменений:', response.status);
+                         alert('Произошла ошибка при сохранении изменений.');
+                     }
+
+                 } catch (error) {
+                     console.error('Ошибка при отправке запроса на изменение:', error);
+                     alert('Произошла ошибка при сохранении изменений.');
+                 }
+            }
+        </script>
+</body>
+</html>

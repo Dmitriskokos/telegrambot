@@ -1,0 +1,344 @@
+2025-01-27 14:35:10,812 - root - INFO - database.py - DatabaseManager: Подключение к БД установлено.
+2025-01-27 14:35:10,852 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:50065
+ * Running on http://38.180.233.145:50065
+2025-01-27 14:35:10,852 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-01-27 14:35:10,853 - werkzeug - INFO -  * Restarting with stat
+2025-01-27 14:35:11,135 - root - INFO - database.py - DatabaseManager: Подключение к БД установлено.
+2025-01-27 14:35:11,161 - werkzeug - WARNING -  * Debugger is active!
+2025-01-27 14:35:11,161 - werkzeug - INFO -  * Debugger PIN: 337-168-120
+2025-01-27 14:35:19,896 - werkzeug - INFO - 37.140.223.47 - - [27/Jan/2025 14:35:19] "GET / HTTP/1.1" 200 -
+2025-01-27 14:35:22,151 - werkzeug - INFO - 37.140.223.47 - - [27/Jan/2025 14:35:22] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-01-27 14:35:25,824 - werkzeug - INFO - 37.140.223.47 - - [27/Jan/2025 14:35:25] "GET /city/Пхукет HTTP/1.1" 200 -
+2025-01-27 14:35:27,866 - root - INFO - database.py - get_all_products: Получены все продукты из БД
+2025-01-27 14:35:27,868 - root - INFO - database.py - DatabaseManager: Подключение к БД установлено.
+2025-01-27 14:35:27,869 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 1
+2025-01-27 14:35:27,869 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 2
+2025-01-27 14:35:27,869 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 3
+2025-01-27 14:35:27,869 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 4
+2025-01-27 14:35:27,869 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 5
+2025-01-27 14:35:27,869 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 6
+2025-01-27 14:35:27,869 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 7
+2025-01-27 14:35:27,869 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 8
+2025-01-27 14:35:27,869 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 9
+2025-01-27 14:35:27,869 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 10
+2025-01-27 14:35:27,870 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 11
+2025-01-27 14:35:27,870 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 12
+2025-01-27 14:35:27,870 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 13
+2025-01-27 14:35:27,870 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 14
+2025-01-27 14:35:27,870 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 15
+2025-01-27 14:35:27,870 - root - INFO - database.py - get_available_products: Found gram products in table gr_1_paid_products for city=Пхукет, district=Олд Таун, product_id=1
+2025-01-27 14:35:27,872 - root - INFO - database.py - get_available_products: Товары для города=Пхукет, района=Олд Таун, product_id=1: КЕТАМИН 1гр, КЕТАМИН 1гр
+2025-01-27 14:35:27,873 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Пхукет, района=Олд Таун, product_id=2
+2025-01-27 14:35:27,873 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Пхукет, района=Олд Таун, product_id=3
+2025-01-27 14:35:27,873 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Пхукет, района=Олд Таун, product_id=4
+2025-01-27 14:35:27,873 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Пхукет, района=Олд Таун, product_id=5
+2025-01-27 14:35:27,874 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Пхукет, района=Олд Таун, product_id=6
+2025-01-27 14:35:27,874 - root - INFO - database.py - get_available_products: Found gram products in table gr_1_paid_products for city=Пхукет, district=Олд Таун, product_id=7
+2025-01-27 14:35:27,874 - root - INFO - database.py - get_available_products: Found gram products in table gr_2_paid_products for city=Пхукет, district=Олд Таун, product_id=7
+2025-01-27 14:35:27,874 - root - INFO - database.py - get_available_products: Товары для города=Пхукет, района=Олд Таун, product_id=7: МЕТАМФЕТАМИН 1гр, МЕТАМФЕТАМИН 1гр, МЕТАМФЕТАМИН 1гр, МЕТАМФЕТАМИН 2гр
+2025-01-27 14:35:27,874 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Пхукет, района=Олд Таун, product_id=8
+2025-01-27 14:35:27,874 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Пхукет, района=Олд Таун, product_id=9
+2025-01-27 14:35:27,875 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Пхукет, района=Олд Таун, product_id=10
+2025-01-27 14:35:27,875 - root - INFO - database.py - get_available_products: Found item products in table item_10_paid_products for city=Пхукет, district=Олд Таун, product_id=11
+2025-01-27 14:35:27,875 - root - INFO - database.py - get_available_products: Товары для города=Пхукет, района=Олд Таун, product_id=11: TRANKIMAZIN 10шт, TRANKIMAZIN 10шт, TRANKIMAZIN 10шт
+2025-01-27 14:35:27,875 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Пхукет, района=Олд Таун, product_id=12
+2025-01-27 14:35:27,876 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Пхукет, района=Олд Таун, product_id=13
+2025-01-27 14:35:27,876 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Пхукет, района=Олд Таун, product_id=14
+2025-01-27 14:35:27,876 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Пхукет, района=Олд Таун, product_id=15
+2025-01-27 14:35:27,892 - werkzeug - INFO - 37.140.223.47 - - [27/Jan/2025 14:35:27] "GET /city/Пхукет/district/Олд%20Таун HTTP/1.1" 200 -
+2025-01-27 14:36:36,178 - werkzeug - INFO - 37.140.223.47 - - [27/Jan/2025 14:36:36] "GET / HTTP/1.1" 200 -
+2025-01-27 14:36:38,953 - werkzeug - INFO - 37.140.223.47 - - [27/Jan/2025 14:36:38] "GET /city/Пхукет HTTP/1.1" 200 -
+2025-01-27 14:36:41,795 - root - INFO - database.py - get_all_products: Получены все продукты из БД
+2025-01-27 14:36:41,795 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 1
+2025-01-27 14:36:41,795 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 2
+2025-01-27 14:36:41,795 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 3
+2025-01-27 14:36:41,795 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 4
+2025-01-27 14:36:41,795 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 5
+2025-01-27 14:36:41,795 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 6
+2025-01-27 14:36:41,795 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 7
+2025-01-27 14:36:41,795 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 8
+2025-01-27 14:36:41,796 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 9
+2025-01-27 14:36:41,796 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 10
+2025-01-27 14:36:41,796 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 11
+2025-01-27 14:36:41,796 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 12
+2025-01-27 14:36:41,796 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 13
+2025-01-27 14:36:41,796 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 14
+2025-01-27 14:36:41,796 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 15
+2025-01-27 14:36:41,796 - root - INFO - database.py - get_available_products: Found gram products in table gr_1_paid_products for city=Пхукет, district=Олд Таун, product_id=1
+2025-01-27 14:36:41,796 - root - INFO - database.py - get_available_products: Товары для города=Пхукет, района=Олд Таун, product_id=1: КЕТАМИН 1гр, КЕТАМИН 1гр
+2025-01-27 14:36:41,797 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Пхукет, района=Олд Таун, product_id=2
+2025-01-27 14:36:41,797 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Пхукет, района=Олд Таун, product_id=3
+2025-01-27 14:36:41,797 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Пхукет, района=Олд Таун, product_id=4
+2025-01-27 14:36:41,797 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Пхукет, района=Олд Таун, product_id=5
+2025-01-27 14:36:41,797 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Пхукет, района=Олд Таун, product_id=6
+2025-01-27 14:36:41,797 - root - INFO - database.py - get_available_products: Found gram products in table gr_1_paid_products for city=Пхукет, district=Олд Таун, product_id=7
+2025-01-27 14:36:41,797 - root - INFO - database.py - get_available_products: Found gram products in table gr_2_paid_products for city=Пхукет, district=Олд Таун, product_id=7
+2025-01-27 14:36:41,798 - root - INFO - database.py - get_available_products: Товары для города=Пхукет, района=Олд Таун, product_id=7: МЕТАМФЕТАМИН 1гр, МЕТАМФЕТАМИН 1гр, МЕТАМФЕТАМИН 1гр, МЕТАМФЕТАМИН 2гр
+2025-01-27 14:36:41,798 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Пхукет, района=Олд Таун, product_id=8
+2025-01-27 14:36:41,798 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Пхукет, района=Олд Таун, product_id=9
+2025-01-27 14:36:41,798 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Пхукет, района=Олд Таун, product_id=10
+2025-01-27 14:36:41,798 - root - INFO - database.py - get_available_products: Found item products in table item_10_paid_products for city=Пхукет, district=Олд Таун, product_id=11
+2025-01-27 14:36:41,798 - root - INFO - database.py - get_available_products: Товары для города=Пхукет, района=Олд Таун, product_id=11: TRANKIMAZIN 10шт, TRANKIMAZIN 10шт, TRANKIMAZIN 10шт
+2025-01-27 14:36:41,798 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Пхукет, района=Олд Таун, product_id=12
+2025-01-27 14:36:41,799 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Пхукет, района=Олд Таун, product_id=13
+2025-01-27 14:36:41,799 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Пхукет, района=Олд Таун, product_id=14
+2025-01-27 14:36:41,799 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Пхукет, района=Олд Таун, product_id=15
+2025-01-27 14:36:41,800 - werkzeug - INFO - 37.140.223.47 - - [27/Jan/2025 14:36:41] "GET /city/Пхукет/district/Олд%20Таун HTTP/1.1" 200 -
+2025-01-27 14:37:16,565 - werkzeug - INFO - 37.140.223.47 - - [27/Jan/2025 14:37:16] "GET / HTTP/1.1" 200 -
+2025-01-27 14:37:18,807 - werkzeug - INFO - 37.140.223.47 - - [27/Jan/2025 14:37:18] "GET /city/Пхукет HTTP/1.1" 200 -
+2025-01-27 14:37:20,845 - root - INFO - database.py - get_all_products: Получены все продукты из БД
+2025-01-27 14:37:20,845 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 1
+2025-01-27 14:37:20,845 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 2
+2025-01-27 14:37:20,845 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 3
+2025-01-27 14:37:20,846 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 4
+2025-01-27 14:37:20,846 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 5
+2025-01-27 14:37:20,846 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 6
+2025-01-27 14:37:20,846 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 7
+2025-01-27 14:37:20,846 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 8
+2025-01-27 14:37:20,846 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 9
+2025-01-27 14:37:20,846 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 10
+2025-01-27 14:37:20,846 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 11
+2025-01-27 14:37:20,846 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 12
+2025-01-27 14:37:20,846 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 13
+2025-01-27 14:37:20,846 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 14
+2025-01-27 14:37:20,846 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 15
+2025-01-27 14:37:20,847 - root - INFO - database.py - get_available_products: Found gram products in table gr_1_paid_products for city=Пхукет, district=Банг Тао, product_id=1
+2025-01-27 14:37:20,847 - root - INFO - database.py - get_available_products: Found gram products in table gr_2_paid_products for city=Пхукет, district=Банг Тао, product_id=1
+2025-01-27 14:37:20,847 - root - INFO - database.py - get_available_products: Товары для города=Пхукет, района=Банг Тао, product_id=1: КЕТАМИН 1гр, КЕТАМИН 1гр, КЕТАМИН 2гр, КЕТАМИН 2гр, КЕТАМИН 2гр
+2025-01-27 14:37:20,847 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Пхукет, района=Банг Тао, product_id=2
+2025-01-27 14:37:20,848 - root - INFO - database.py - get_available_products: Found gram products in table gr_1_paid_products for city=Пхукет, district=Банг Тао, product_id=3
+2025-01-27 14:37:20,848 - root - INFO - database.py - get_available_products: Товары для города=Пхукет, района=Банг Тао, product_id=3: МДМА 1гр
+2025-01-27 14:37:20,848 - root - INFO - database.py - get_available_products: Found gram products in table gr_1_paid_products for city=Пхукет, district=Банг Тао, product_id=4
+2025-01-27 14:37:20,848 - root - INFO - database.py - get_available_products: Товары для города=Пхукет, района=Банг Тао, product_id=4: МЕФЕДРОН 1гр, МЕФЕДРОН 1гр
+2025-01-27 14:37:20,848 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Пхукет, района=Банг Тао, product_id=5
+2025-01-27 14:37:20,848 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Пхукет, района=Банг Тао, product_id=6
+2025-01-27 14:37:20,848 - root - INFO - database.py - get_available_products: Found gram products in table gr_1_paid_products for city=Пхукет, district=Банг Тао, product_id=7
+2025-01-27 14:37:20,848 - root - INFO - database.py - get_available_products: Товары для города=Пхукет, района=Банг Тао, product_id=7: МЕТАМФЕТАМИН 1гр
+2025-01-27 14:37:20,849 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Пхукет, района=Банг Тао, product_id=8
+2025-01-27 14:37:20,849 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Пхукет, района=Банг Тао, product_id=9
+2025-01-27 14:37:20,849 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Пхукет, района=Банг Тао, product_id=10
+2025-01-27 14:37:20,849 - root - INFO - database.py - get_available_products: Found item products in table item_5_paid_products for city=Пхукет, district=Банг Тао, product_id=11
+2025-01-27 14:37:20,849 - root - INFO - database.py - get_available_products: Товары для города=Пхукет, района=Банг Тао, product_id=11: TRANKIMAZIN 5шт, TRANKIMAZIN 5шт, TRANKIMAZIN 5шт, TRANKIMAZIN 5шт, TRANKIMAZIN 5шт, TRANKIMAZIN 5шт, TRANKIMAZIN 5шт, TRANKIMAZIN 5шт, TRANKIMAZIN 5шт, TRANKIMAZIN 5шт, TRANKIMAZIN 5шт
+2025-01-27 14:37:20,849 - root - INFO - database.py - get_available_products: Found gram products in table gr_5_paid_products for city=Пхукет, district=Банг Тао, product_id=12
+2025-01-27 14:37:20,849 - root - INFO - database.py - get_available_products: Found gram products in table gr_10_paid_products for city=Пхукет, district=Банг Тао, product_id=12
+2025-01-27 14:37:20,850 - root - INFO - database.py - get_available_products: Товары для города=Пхукет, района=Банг Тао, product_id=12: ГРИБЫ 5гр, ГРИБЫ 10гр, ГРИБЫ 10гр
+2025-01-27 14:37:20,850 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Пхукет, района=Банг Тао, product_id=13
+2025-01-27 14:37:20,850 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Пхукет, района=Банг Тао, product_id=14
+2025-01-27 14:37:20,850 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Пхукет, района=Банг Тао, product_id=15
+2025-01-27 14:37:20,852 - werkzeug - INFO - 37.140.223.47 - - [27/Jan/2025 14:37:20] "GET /city/Пхукет/district/Банг%20Тао HTTP/1.1" 200 -
+2025-01-27 14:37:26,900 - root - INFO - Найдены товары для КЕТАМИН 1гр, city=Пхукет, district=Банг Тао во множественных таблицах.
+2025-01-27 14:37:26,920 - werkzeug - INFO - 37.140.223.47 - - [27/Jan/2025 14:37:26] "GET /city/Пхукет/district/Банг%20Тао/product/КЕТАМИН%201гр HTTP/1.1" 200 -
+2025-01-27 14:37:35,480 - werkzeug - INFO - 37.140.223.47 - - [27/Jan/2025 14:37:35] "[33mGET /city/Пхукет/district/Банг%20Тао/product/["/data/images/b9d40fa3-8119-449c-b4e1-8472eab9cfeb.jpeg" HTTP/1.1[0m" 404 -
+2025-01-27 14:37:43,992 - root - INFO - database.py - get_all_products: Получены все продукты из БД
+2025-01-27 14:37:43,992 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 1
+2025-01-27 14:37:43,992 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 2
+2025-01-27 14:37:43,992 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 3
+2025-01-27 14:37:43,992 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 4
+2025-01-27 14:37:43,992 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 5
+2025-01-27 14:37:43,992 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 6
+2025-01-27 14:37:43,992 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 7
+2025-01-27 14:37:43,993 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 8
+2025-01-27 14:37:43,993 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 9
+2025-01-27 14:37:43,993 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 10
+2025-01-27 14:37:43,993 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 11
+2025-01-27 14:37:43,993 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 12
+2025-01-27 14:37:43,993 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 13
+2025-01-27 14:37:43,993 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 14
+2025-01-27 14:37:43,993 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 15
+2025-01-27 14:37:43,993 - root - INFO - database.py - get_available_products: Found gram products in table gr_1_paid_products for city=Пхукет, district=Банг Тао, product_id=1
+2025-01-27 14:37:43,993 - root - INFO - database.py - get_available_products: Found gram products in table gr_2_paid_products for city=Пхукет, district=Банг Тао, product_id=1
+2025-01-27 14:37:43,994 - root - INFO - database.py - get_available_products: Товары для города=Пхукет, района=Банг Тао, product_id=1: КЕТАМИН 1гр, КЕТАМИН 1гр, КЕТАМИН 2гр, КЕТАМИН 2гр, КЕТАМИН 2гр
+2025-01-27 14:37:43,994 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Пхукет, района=Банг Тао, product_id=2
+2025-01-27 14:37:43,994 - root - INFO - database.py - get_available_products: Found gram products in table gr_1_paid_products for city=Пхукет, district=Банг Тао, product_id=3
+2025-01-27 14:37:43,994 - root - INFO - database.py - get_available_products: Товары для города=Пхукет, района=Банг Тао, product_id=3: МДМА 1гр
+2025-01-27 14:37:43,994 - root - INFO - database.py - get_available_products: Found gram products in table gr_1_paid_products for city=Пхукет, district=Банг Тао, product_id=4
+2025-01-27 14:37:43,994 - root - INFO - database.py - get_available_products: Товары для города=Пхукет, района=Банг Тао, product_id=4: МЕФЕДРОН 1гр, МЕФЕДРОН 1гр
+2025-01-27 14:37:43,995 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Пхукет, района=Банг Тао, product_id=5
+2025-01-27 14:37:43,995 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Пхукет, района=Банг Тао, product_id=6
+2025-01-27 14:37:43,995 - root - INFO - database.py - get_available_products: Found gram products in table gr_1_paid_products for city=Пхукет, district=Банг Тао, product_id=7
+2025-01-27 14:37:43,995 - root - INFO - database.py - get_available_products: Товары для города=Пхукет, района=Банг Тао, product_id=7: МЕТАМФЕТАМИН 1гр
+2025-01-27 14:37:43,995 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Пхукет, района=Банг Тао, product_id=8
+2025-01-27 14:37:43,996 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Пхукет, района=Банг Тао, product_id=9
+2025-01-27 14:37:43,996 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Пхукет, района=Банг Тао, product_id=10
+2025-01-27 14:37:43,996 - root - INFO - database.py - get_available_products: Found item products in table item_5_paid_products for city=Пхукет, district=Банг Тао, product_id=11
+2025-01-27 14:37:43,996 - root - INFO - database.py - get_available_products: Товары для города=Пхукет, района=Банг Тао, product_id=11: TRANKIMAZIN 5шт, TRANKIMAZIN 5шт, TRANKIMAZIN 5шт, TRANKIMAZIN 5шт, TRANKIMAZIN 5шт, TRANKIMAZIN 5шт, TRANKIMAZIN 5шт, TRANKIMAZIN 5шт, TRANKIMAZIN 5шт, TRANKIMAZIN 5шт, TRANKIMAZIN 5шт
+2025-01-27 14:37:43,996 - root - INFO - database.py - get_available_products: Found gram products in table gr_5_paid_products for city=Пхукет, district=Банг Тао, product_id=12
+2025-01-27 14:37:43,996 - root - INFO - database.py - get_available_products: Found gram products in table gr_10_paid_products for city=Пхукет, district=Банг Тао, product_id=12
+2025-01-27 14:37:43,996 - root - INFO - database.py - get_available_products: Товары для города=Пхукет, района=Банг Тао, product_id=12: ГРИБЫ 5гр, ГРИБЫ 10гр, ГРИБЫ 10гр
+2025-01-27 14:37:43,997 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Пхукет, района=Банг Тао, product_id=13
+2025-01-27 14:37:43,997 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Пхукет, района=Банг Тао, product_id=14
+2025-01-27 14:37:43,997 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Пхукет, района=Банг Тао, product_id=15
+2025-01-27 14:37:43,999 - werkzeug - INFO - 37.140.223.47 - - [27/Jan/2025 14:37:43] "GET /city/Пхукет/district/Банг%20Тао HTTP/1.1" 200 -
+2025-01-27 14:37:46,843 - werkzeug - INFO - 37.140.223.47 - - [27/Jan/2025 14:37:46] "GET /city/Пхукет HTTP/1.1" 200 -
+2025-01-27 14:37:50,388 - werkzeug - INFO - 37.140.223.47 - - [27/Jan/2025 14:37:50] "GET / HTTP/1.1" 200 -
+2025-01-27 14:39:23,895 - werkzeug - INFO -  * Detected change in '/var/www/www-root/data/www/thaihub.store/gptbot/products/app.py', reloading
+2025-01-27 14:39:24,022 - werkzeug - INFO -  * Restarting with stat
+2025-01-27 14:39:24,312 - root - INFO - database.py - DatabaseManager: Подключение к БД установлено.
+2025-01-27 14:39:24,347 - werkzeug - WARNING -  * Debugger is active!
+2025-01-27 14:39:24,350 - werkzeug - INFO -  * Debugger PIN: 337-168-120
+2025-01-27 14:39:32,419 - werkzeug - INFO -  * Detected change in '/var/www/www-root/data/www/thaihub.store/gptbot/products/app.py', reloading
+2025-01-27 14:39:32,489 - werkzeug - INFO -  * Restarting with stat
+2025-01-27 14:39:32,742 - root - INFO - database.py - DatabaseManager: Подключение к БД установлено.
+2025-01-27 14:39:32,769 - werkzeug - WARNING -  * Debugger is active!
+2025-01-27 14:39:32,769 - werkzeug - INFO -  * Debugger PIN: 337-168-120
+2025-01-27 14:40:28,006 - werkzeug - INFO - 37.140.223.47 - - [27/Jan/2025 14:40:28] "GET / HTTP/1.1" 200 -
+2025-01-27 14:40:36,412 - werkzeug - INFO - 37.140.223.47 - - [27/Jan/2025 14:40:36] "GET /city/Паттайя HTTP/1.1" 200 -
+2025-01-27 14:40:40,027 - root - INFO - database.py - get_all_products: Получены все продукты из БД
+2025-01-27 14:40:40,027 - root - INFO - database.py - DatabaseManager: Подключение к БД установлено.
+2025-01-27 14:40:40,028 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 1
+2025-01-27 14:40:40,028 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 2
+2025-01-27 14:40:40,028 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 3
+2025-01-27 14:40:40,028 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 4
+2025-01-27 14:40:40,028 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 5
+2025-01-27 14:40:40,029 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 6
+2025-01-27 14:40:40,029 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 7
+2025-01-27 14:40:40,029 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 8
+2025-01-27 14:40:40,029 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 9
+2025-01-27 14:40:40,029 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 10
+2025-01-27 14:40:40,029 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 11
+2025-01-27 14:40:40,029 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 12
+2025-01-27 14:40:40,029 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 13
+2025-01-27 14:40:40,029 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 14
+2025-01-27 14:40:40,029 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 15
+2025-01-27 14:40:40,030 - root - INFO - database.py - get_available_products: Found gram products in table gr_1_paid_products for city=Паттайя, district=Вонгамат, product_id=1
+2025-01-27 14:40:40,030 - root - INFO - database.py - get_available_products: Товары для города=Паттайя, района=Вонгамат, product_id=1: КЕТАМИН 1гр, КЕТАМИН 1гр, КЕТАМИН 1гр
+2025-01-27 14:40:40,031 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Паттайя, района=Вонгамат, product_id=2
+2025-01-27 14:40:40,031 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Паттайя, района=Вонгамат, product_id=3
+2025-01-27 14:40:40,032 - root - INFO - database.py - get_available_products: Found gram products in table gr_1_paid_products for city=Паттайя, district=Вонгамат, product_id=4
+2025-01-27 14:40:40,032 - root - INFO - database.py - get_available_products: Товары для города=Паттайя, района=Вонгамат, product_id=4: МЕФЕДРОН 1гр, МЕФЕДРОН 1гр, МЕФЕДРОН 1гр
+2025-01-27 14:40:40,032 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Паттайя, района=Вонгамат, product_id=5
+2025-01-27 14:40:40,032 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Паттайя, района=Вонгамат, product_id=6
+2025-01-27 14:40:40,032 - root - INFO - database.py - get_available_products: Found gram products in table gr_1_paid_products for city=Паттайя, district=Вонгамат, product_id=7
+2025-01-27 14:40:40,032 - root - INFO - database.py - get_available_products: Товары для города=Паттайя, района=Вонгамат, product_id=7: МЕТАМФЕТАМИН 1гр, МЕТАМФЕТАМИН 1гр
+2025-01-27 14:40:40,033 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Паттайя, района=Вонгамат, product_id=8
+2025-01-27 14:40:40,033 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Паттайя, района=Вонгамат, product_id=9
+2025-01-27 14:40:40,033 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Паттайя, района=Вонгамат, product_id=10
+2025-01-27 14:40:40,033 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Паттайя, района=Вонгамат, product_id=11
+2025-01-27 14:40:40,033 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Паттайя, района=Вонгамат, product_id=12
+2025-01-27 14:40:40,033 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Паттайя, района=Вонгамат, product_id=13
+2025-01-27 14:40:40,033 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Паттайя, района=Вонгамат, product_id=14
+2025-01-27 14:40:40,033 - root - INFO - database.py - get_available_products: Found gram products in table gr_1_paid_products for city=Паттайя, district=Вонгамат, product_id=15
+2025-01-27 14:40:40,034 - root - INFO - database.py - get_available_products: Товары для города=Паттайя, района=Вонгамат, product_id=15: МЕФ МУКА 1гр, МЕФ МУКА 1гр, МЕФ МУКА 1гр, МЕФ МУКА 1гр, МЕФ МУКА 1гр
+2025-01-27 14:40:40,045 - werkzeug - INFO - 37.140.223.47 - - [27/Jan/2025 14:40:40] "GET /city/Паттайя/district/Вонгамат HTTP/1.1" 200 -
+2025-01-27 14:40:58,137 - werkzeug - INFO - 37.140.223.47 - - [27/Jan/2025 14:40:58] "GET /city/Паттайя HTTP/1.1" 200 -
+2025-01-27 14:41:01,857 - werkzeug - INFO - 37.140.223.47 - - [27/Jan/2025 14:41:01] "GET / HTTP/1.1" 200 -
+2025-01-27 14:41:03,830 - werkzeug - INFO - 37.140.223.47 - - [27/Jan/2025 14:41:03] "GET /city/Самуи HTTP/1.1" 200 -
+2025-01-27 14:41:07,795 - root - INFO - database.py - get_all_products: Получены все продукты из БД
+2025-01-27 14:41:07,796 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 1
+2025-01-27 14:41:07,796 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 2
+2025-01-27 14:41:07,796 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 3
+2025-01-27 14:41:07,796 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 4
+2025-01-27 14:41:07,796 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 5
+2025-01-27 14:41:07,796 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 6
+2025-01-27 14:41:07,796 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 7
+2025-01-27 14:41:07,796 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 8
+2025-01-27 14:41:07,797 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 9
+2025-01-27 14:41:07,797 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 10
+2025-01-27 14:41:07,797 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 11
+2025-01-27 14:41:07,797 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 12
+2025-01-27 14:41:07,797 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 13
+2025-01-27 14:41:07,797 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 14
+2025-01-27 14:41:07,797 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 15
+2025-01-27 14:41:07,798 - root - INFO - database.py - get_available_products: Found gram products in table gr_1_paid_products for city=Самуи, district=Ламаи, product_id=1
+2025-01-27 14:41:07,798 - root - INFO - database.py - get_available_products: Товары для города=Самуи, района=Ламаи, product_id=1: КЕТАМИН 1гр, КЕТАМИН 1гр
+2025-01-27 14:41:07,798 - root - INFO - database.py - get_available_products: Found item products in table item_2_paid_products for city=Самуи, district=Ламаи, product_id=2
+2025-01-27 14:41:07,798 - root - INFO - database.py - get_available_products: Товары для города=Самуи, района=Ламаи, product_id=2: ЭКСТАЗИ 2шт, ЭКСТАЗИ 2шт
+2025-01-27 14:41:07,798 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Самуи, района=Ламаи, product_id=3
+2025-01-27 14:41:07,799 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Самуи, района=Ламаи, product_id=4
+2025-01-27 14:41:07,799 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Самуи, района=Ламаи, product_id=5
+2025-01-27 14:41:07,799 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Самуи, района=Ламаи, product_id=6
+2025-01-27 14:41:07,799 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Самуи, района=Ламаи, product_id=7
+2025-01-27 14:41:07,800 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Самуи, района=Ламаи, product_id=8
+2025-01-27 14:41:07,800 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Самуи, района=Ламаи, product_id=9
+2025-01-27 14:41:07,800 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Самуи, района=Ламаи, product_id=10
+2025-01-27 14:41:07,801 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Самуи, района=Ламаи, product_id=11
+2025-01-27 14:41:07,801 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Самуи, района=Ламаи, product_id=12
+2025-01-27 14:41:07,801 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Самуи, района=Ламаи, product_id=13
+2025-01-27 14:41:07,802 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Самуи, района=Ламаи, product_id=14
+2025-01-27 14:41:07,802 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Самуи, района=Ламаи, product_id=15
+2025-01-27 14:41:07,804 - werkzeug - INFO - 37.140.223.47 - - [27/Jan/2025 14:41:07] "GET /city/Самуи/district/Ламаи HTTP/1.1" 200 -
+2025-01-27 14:41:10,878 - werkzeug - INFO - 37.140.223.47 - - [27/Jan/2025 14:41:10] "GET / HTTP/1.1" 200 -
+2025-01-27 14:41:15,592 - werkzeug - INFO - 37.140.223.47 - - [27/Jan/2025 14:41:15] "GET /city/Бангкок HTTP/1.1" 200 -
+2025-01-27 14:41:21,349 - root - INFO - database.py - get_all_products: Получены все продукты из БД
+2025-01-27 14:41:21,353 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 1
+2025-01-27 14:41:21,353 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 2
+2025-01-27 14:41:21,354 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 3
+2025-01-27 14:41:21,354 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 4
+2025-01-27 14:41:21,354 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 5
+2025-01-27 14:41:21,354 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 6
+2025-01-27 14:41:21,354 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 7
+2025-01-27 14:41:21,354 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 8
+2025-01-27 14:41:21,354 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 9
+2025-01-27 14:41:21,354 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 10
+2025-01-27 14:41:21,354 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 11
+2025-01-27 14:41:21,354 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 12
+2025-01-27 14:41:21,354 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 13
+2025-01-27 14:41:21,354 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 14
+2025-01-27 14:41:21,354 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 15
+2025-01-27 14:41:21,355 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Бангкок, района=Сукхумвит, product_id=1
+2025-01-27 14:41:21,355 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Бангкок, района=Сукхумвит, product_id=2
+2025-01-27 14:41:21,355 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Бангкок, района=Сукхумвит, product_id=3
+2025-01-27 14:41:21,355 - root - INFO - database.py - get_available_products: Found gram products in table gr_1_paid_products for city=Бангкок, district=Сукхумвит, product_id=4
+2025-01-27 14:41:21,356 - root - INFO - database.py - get_available_products: Товары для города=Бангкок, района=Сукхумвит, product_id=4: МЕФЕДРОН 1гр, МЕФЕДРОН 1гр, МЕФЕДРОН 1гр, МЕФЕДРОН 1гр, МЕФЕДРОН 1гр, МЕФЕДРОН 1гр, МЕФЕДРОН 1гр, МЕФЕДРОН 1гр, МЕФЕДРОН 1гр, МЕФЕДРОН 1гр, МЕФЕДРОН 1гр
+2025-01-27 14:41:21,356 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Бангкок, района=Сукхумвит, product_id=5
+2025-01-27 14:41:21,356 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Бангкок, района=Сукхумвит, product_id=6
+2025-01-27 14:41:21,356 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Бангкок, района=Сукхумвит, product_id=7
+2025-01-27 14:41:21,356 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Бангкок, района=Сукхумвит, product_id=8
+2025-01-27 14:41:21,356 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Бангкок, района=Сукхумвит, product_id=9
+2025-01-27 14:41:21,357 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Бангкок, района=Сукхумвит, product_id=10
+2025-01-27 14:41:21,357 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Бангкок, района=Сукхумвит, product_id=11
+2025-01-27 14:41:21,357 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Бангкок, района=Сукхумвит, product_id=12
+2025-01-27 14:41:21,357 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Бангкок, района=Сукхумвит, product_id=13
+2025-01-27 14:41:21,357 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Бангкок, района=Сукхумвит, product_id=14
+2025-01-27 14:41:21,357 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Бангкок, района=Сукхумвит, product_id=15
+2025-01-27 14:41:21,360 - werkzeug - INFO - 37.140.223.47 - - [27/Jan/2025 14:41:21] "GET /city/Бангкок/district/Сукхумвит HTTP/1.1" 200 -
+2025-01-27 14:43:53,607 - werkzeug - INFO -  * Detected change in '/var/www/www-root/data/www/thaihub.store/gptbot/products/app.py', reloading
+2025-01-27 14:43:53,717 - werkzeug - INFO -  * Restarting with stat
+2025-01-27 14:43:54,014 - root - INFO - database.py - DatabaseManager: Подключение к БД установлено.
+2025-01-27 14:43:54,046 - werkzeug - WARNING -  * Debugger is active!
+2025-01-27 14:43:54,047 - werkzeug - INFO -  * Debugger PIN: 337-168-120
+2025-01-27 14:44:10,899 - werkzeug - INFO - 37.140.223.47 - - [27/Jan/2025 14:44:10] "GET /city/Бангкок HTTP/1.1" 200 -
+2025-01-27 14:44:12,574 - werkzeug - INFO - 37.140.223.47 - - [27/Jan/2025 14:44:12] "GET / HTTP/1.1" 200 -
+2025-01-27 14:44:16,613 - werkzeug - INFO - 37.140.223.47 - - [27/Jan/2025 14:44:16] "GET /city/Бангкок HTTP/1.1" 200 -
+2025-01-27 14:44:17,920 - root - INFO - database.py - get_all_products: Получены все продукты из БД
+2025-01-27 14:44:17,920 - root - INFO - database.py - DatabaseManager: Подключение к БД установлено.
+2025-01-27 14:44:17,921 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 1
+2025-01-27 14:44:17,921 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 2
+2025-01-27 14:44:17,921 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 3
+2025-01-27 14:44:17,921 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 4
+2025-01-27 14:44:17,921 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 5
+2025-01-27 14:44:17,921 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 6
+2025-01-27 14:44:17,921 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 7
+2025-01-27 14:44:17,921 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 8
+2025-01-27 14:44:17,921 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 9
+2025-01-27 14:44:17,921 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 10
+2025-01-27 14:44:17,921 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 11
+2025-01-27 14:44:17,921 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 12
+2025-01-27 14:44:17,921 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 13
+2025-01-27 14:44:17,922 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 14
+2025-01-27 14:44:17,922 - root - INFO - database.py - get_product_locations: Получены локации для продукта с ID 15
+2025-01-27 14:44:17,922 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Бангкок, района=Сукхумвит, product_id=1
+2025-01-27 14:44:17,923 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Бангкок, района=Сукхумвит, product_id=2
+2025-01-27 14:44:17,923 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Бангкок, района=Сукхумвит, product_id=3
+2025-01-27 14:44:17,924 - root - INFO - database.py - get_available_products: Found gram products in table gr_1_paid_products for city=Бангкок, district=Сукхумвит, product_id=4
+2025-01-27 14:44:17,924 - root - INFO - database.py - get_available_products: Товары для города=Бангкок, района=Сукхумвит, product_id=4: МЕФЕДРОН 1гр, МЕФЕДРОН 1гр, МЕФЕДРОН 1гр, МЕФЕДРОН 1гр, МЕФЕДРОН 1гр, МЕФЕДРОН 1гр, МЕФЕДРОН 1гр, МЕФЕДРОН 1гр, МЕФЕДРОН 1гр, МЕФЕДРОН 1гр, МЕФЕДРОН 1гр
+2025-01-27 14:44:17,924 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Бангкок, района=Сукхумвит, product_id=5
+2025-01-27 14:44:17,924 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Бангкок, района=Сукхумвит, product_id=6
+2025-01-27 14:44:17,924 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Бангкок, района=Сукхумвит, product_id=7
+2025-01-27 14:44:17,924 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Бангкок, района=Сукхумвит, product_id=8
+2025-01-27 14:44:17,925 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Бангкок, района=Сукхумвит, product_id=9
+2025-01-27 14:44:17,925 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Бангкок, района=Сукхумвит, product_id=10
+2025-01-27 14:44:17,925 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Бангкок, района=Сукхумвит, product_id=11
+2025-01-27 14:44:17,925 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Бангкок, района=Сукхумвит, product_id=12
+2025-01-27 14:44:17,925 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Бангкок, района=Сукхумвит, product_id=13
+2025-01-27 14:44:17,925 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Бангкок, района=Сукхумвит, product_id=14
+2025-01-27 14:44:17,925 - root - WARNING - database.py - get_available_products: Не найдены товары для города=Бангкок, района=Сукхумвит, product_id=15
+2025-01-27 14:44:17,934 - werkzeug - INFO - 37.140.223.47 - - [27/Jan/2025 14:44:17] "GET /city/Бангкок/district/Сукхумвит HTTP/1.1" 200 -
+2025-01-27 14:44:22,222 - root - WARNING - Не найдены товары для МЕФЕДРОН, город=Бангкок, район=Сукхумвит во всех таблицах.
+2025-01-27 14:44:22,235 - werkzeug - INFO - 37.140.223.47 - - [27/Jan/2025 14:44:22] "GET /city/Бангкок/district/Сукхумвит/product/МЕФЕДРОН%201гр HTTP/1.1" 200 -
+2025-01-27 14:44:55,138 - root - WARNING - Не найдены товары для МЕФЕДРОН, город=Бангкок, район=Сукхумвит во всех таблицах.
+2025-01-27 14:44:55,141 - werkzeug - INFO - 37.140.223.47 - - [27/Jan/2025 14:44:55] "GET /city/Бангкок/district/Сукхумвит/product/МЕФЕДРОН%201гр HTTP/1.1" 200 -
+2025-01-27 14:45:35,759 - werkzeug - INFO -  * Detected change in '/var/www/www-root/data/www/thaihub.store/gptbot/products/app.py', reloading
+2025-01-27 14:45:35,866 - werkzeug - INFO -  * Restarting with stat

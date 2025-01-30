@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}Выбор города{% endblock %}
+{% block page_title %}Выберите город{% endblock %}
+
+{% block content %}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {% for city, bookmark_count in cities %}
+            <div class="product-card">
+                <span class="product-badge">{{ bookmark_count }}</span>
+                <h3 class="product-title">
+                    <a href="{{ url_for('city_districts', city_name=city) }}" class="product-link">
+                        {{ city }}
+                    </a>
+                </h3>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

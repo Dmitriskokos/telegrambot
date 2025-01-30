@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Структурированные Клады</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Стили, как и прежде - без изменений */
+        body { font-family: sans-serif; }
+        .container { max-width: 1200px; margin: 20px auto; padding: 15px; }
+        .city-select { margin-bottom: 20px; }
+        .city-select label { display: block; margin-bottom: 0.5rem; font-weight: bold; }
+        .city-select select { width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; }
+        .districts-container { margin-bottom: 20px; }
+        .city-section { margin-bottom: 20px; }
+        .city-section h2 { font-size: 1.5rem; margin-bottom: 1rem; }
+        .district { margin-bottom: 15px; padding: 10px; border: 1px solid #ddd; border-radius: 5px; background-color: white; }
+        .district-title { font-weight: bold; margin-bottom: 10px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; padding: 8px; border-bottom: 1px solid #eee; }
+        .district-title h3 { margin: 0; font-size: 1.1rem; }
+        .district-title i { margin-left: 10px; }
+        .district-products { padding-left: 20px; display: none; }
+        .product-item { cursor: pointer; margin-bottom: 8px; padding: 6px 10px; border-radius: 4px; transition: background-color 0.2s; }
+        .product-item:hover { background-color: #f0f0f0; text-decoration: underline; color: blue; }
+        .product-list-modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.4); }
+        .product-list-modal-content { background-color: #fefefe; margin: 10% auto; padding: 20px; border: 1px solid #888; width: 80%; max-height: 80%; overflow-y: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .close-button { color: #aaa; float: right; font-size: 28px; font-weight: bold; }
+        .close-button:hover, .close-button:focus { color: black; text-decoration: none; cursor: pointer; }
+        .product-details-list { list-style-type: none; padding: 0; }
+        .product-details-list li { margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #eee; }
+        .product-details-list li:last-child { border-bottom: none; }
+        .product-details-list li strong { font-weight: bold; }
+        .product-details-list li img { max-width: 100%; height: auto; display: block; margin-top: 5px; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+
+        /* Адаптивные стили, как и прежде - без изменений */
+        @media (max-width: 768px) {
+            .container { padding: 10px; }
+            .city-select { margin-bottom: 15px; }
+            .city-section { margin-bottom: 15px; }
+            .city-section h2 { font-size: 1.3rem; margin-bottom: 0.8rem; }
+            .district { padding: 8px; margin-bottom: 10px; }
+            .district-title { font-size: 1rem; padding: 6px; }
+            .district-title h3 { font-size: 1rem; }
+            .product-item { font-size: 0.9rem; padding: 5px 8px; margin-bottom: 6px; }
+            .product-list-modal-content { width: 95%; margin-top: 20%; padding: 15px; } /* Увеличим margin-top для мобильных */
+            .close-button { font-size: 24px; }
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto p-4">
+        <h1 class="text-2xl font-bold mb-4">Структурированные Клады</h1>
+
+        <div class="city-select">
+            <label for="cityFilter" class="block text-sm font-medium text-gray-700 mb-2">Выберите город:</label>
+            <select id="cityFilter" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                <option value="">Все города</option>
+                {% for city in structured_data.keys() %}
+                    <option value="{{ city }}">{{ city }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div id="districtsContainer" class="districts-container">
+            {% for city, districts in structured_data.items() %}
+                <div class="city-section" data-city="{{ city }}" {% if structured_data.keys()|list|first != city %}style="display:none;"{% endif %}>
+                    <h2 class="text-xl font-semibold mb-2">{{ city }}</h2>
+                    {% for district, products in districts.items() %}
+                        <div class="district shadow-md rounded-md mb-4">
+                            <div class="district-title" onclick="toggleDistrictProducts('{{ city }}', '{{ district }}')">
+                                <h3>{{ district }}</h3>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div id="district-{{ city|replace(' ', '-') }}-{{ district|replace(' ', '-') }}" class="district-products hidden" data-loaded="false">
+                                <!-- Продукты будут загружаться сюда через JavaScript -->
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- Модальное окно для списка товаров -->
+        <div id="productListModal" class="product-list-modal">
+            <div class="product-list-modal-content">
+                <span class="close-button" onclick="closeProductListModal()">×</span>
+                <h2 id="modalTitle">Список товаров</h2>
+                <ul id="modalProductList" class="product-details-list">
+                    <!-- Список кладов товара будет загружаться сюда через JavaScript -->
+                </ul>
+            </div>
+        </div>
+
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const cityFilter = document.getElementById('cityFilter');
+            const citySections = document.querySelectorAll('.city-section');
+
+            cityFilter.addEventListener('change', function() {
+                const selectedCity = cityFilter.value;
+
+                citySections.forEach(section => {
+                    const city = section.dataset.city;
+                    if (selectedCity === "" || selectedCity === city) {
+                        section.style.display = 'block';
+                    } else {
+                        section.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        async function toggleDistrictProducts(city, district) {
+            const districtProductsDivId = `district-${city.replace(' ', '-')}-${district.replace(' ', '-')}`;
+            const districtProductsDiv = document.getElementById(districtProductsDivId);
+            const districtTitle = districtProductsDiv.previousElementSibling;
+            const icon = districtTitle ? districtTitle.querySelector('i.fas') : null;
+
+            console.log("toggleDistrictProducts вызвана для:", { city, district, districtProductsDiv, districtTitle, icon });
+
+            if (!districtProductsDiv) {
+                console.error("Не найден districtProductsDiv с ID:", districtProductsDivId);
+                return;
+            }
+
+            if (districtProductsDiv.classList.contains('hidden')) {
+                if (districtProductsDiv.dataset.loaded === 'false') {
+                    districtProductsDiv.innerHTML = '<p>Загрузка товаров...</p>';
+                    try {
+                        const productsResponse = await fetchDistrictProducts(city, district); // <--- Сохраняем response в переменную
+                        console.log("fetchDistrictProducts response:", productsResponse); // <--- Отладка response целиком
+
+                        const products = await productsResponse.json(); // <--- Извлекаем JSON здесь
+                        console.log("Получены товары:", products); // <--- Отладка полученных товаров
+
+                        districtProductsDiv.innerHTML = ''; // Очищаем "Загрузка..."
+                        if (products && products.length > 0) {
+                            console.log("Начинаем обработку товаров. Количество:", products.length); // <--- Отладка количества товаров
+                            products.forEach(product => {
+                                console.log("Обрабатываем товар:", product); // <--- Отладка каждого товара в цикле
+                                const productDiv = document.createElement('div');
+                                productDiv.classList.add('product-item');
+                                productDiv.textContent = `${product.name} (x${product.count}${product.type})`;
+                                productDiv.onclick = () => openProductListModal(city, district, product.name);
+                                districtProductsDiv.appendChild(productDiv);
+                                console.log("Товар добавлен в DOM:", productDiv); // <--- Отладка добавления в DOM
+                            });
+                            districtProductsDiv.dataset.loaded = 'true';
+                            console.log("Товары успешно загружены и отображены для района:", district); // <--- Отладка успешной загрузки
+                        } else {
+                            districtProductsDiv.innerHTML = '<p>Нет доступных товаров в этом районе.</p>';
+                            console.log("Нет доступных товаров для района:", district); // <--- Отладка отсутствия товаров
+                        }
+                    } catch (error) {
+                        console.error("Ошибка fetchDistrictProducts:", error);
+                        districtProductsDiv.innerHTML = '<p class="text-red-500">Ошибка загрузки товаров.</p>';
+                    }
+                }
+                districtProductsDiv.classList.remove('hidden');
+                if (icon) {
+                    icon.classList.remove('fa-chevron-down');
+                    icon.classList.add('fa-chevron-up');
+                }
+            } else {
+                districtProductsDiv.classList.add('hidden');
+                if (icon) {
+                    icon.classList.remove('fa-chevron-up');
+                    icon.classList.add('fa-chevron-down');
+                }
+            }
+        }
+
+
+        let productListModal = document.getElementById('productListModal');
+        let modalTitle = document.getElementById('modalTitle');
+        let modalProductList = document.getElementById('modalProductList');
+
+        function openProductListModal(city, district, productName) {
+            modalTitle.textContent = `Клады: ${productName} - ${district}, ${city}`;
+            modalProductList.innerHTML = '<p>Загрузка кладов...</p>';
+            productListModal.style.display = "block";
+
+            fetchProductDetails(city, district, productName);
+        }
+
+        function closeProductListModal() {
+            productListModal.style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            if (event.target == productListModal) {
+                productListModal.style.display = "none";
+            }
+        }
+
+        async function fetchDistrictProducts(city, district) {
+            try {
+                const response = await fetch(`/get_district_products?city=${encodeURIComponent(city)}&district=${encodeURIComponent(district)}`);
+                if (!response.ok) {
+                    console.error('Ошибка при загрузке товаров района:', response.status, response.statusText); // <--- Добавлена отладка response.statusText
+                    return null;
+                }
+                return await response.json();
+            } catch (error) {
+                console.error('Ошибка fetchDistrictProducts:', error);
+                return null;
+            }
+        }
+
+
+        async function fetchProductDetails(city, district, productName) {
+            modalProductList.innerHTML = '<p>Загрузка кладов...</p>';
+
+            try {
+                const response = await fetch(`/get_product_details?city=${encodeURIComponent(city)}&district=${encodeURIComponent(district)}&productName=${encodeURIComponent(productName)}`);
+                if (!response.ok) {
+                    modalProductList.innerHTML = '<p>Ошибка загрузки кладов.</p>';
+                    console.error('Ошибка при загрузке деталей кладов:', response.status, response.statusText); // <--- Добавлена отладка response.statusText
+                    return;
+                }
+                const productDetails = await response.json();
+
+                if (productDetails && productDetails.length > 0) {
+                    modalProductList.innerHTML = '';
+                    productDetails.forEach(product => {
+                        const listItem = document.createElement('li');
+                        listItem.innerHTML = `
+                            <strong>ID:</strong> ${product.id}<br>
+                            <strong>Инструкция:</strong> ${product.instruction}<br>
+                            ${product.images && product.images.length > 0 ? `
+                                <strong>Изображения:</strong>
+                                <ul>
+                                    ${product.images.map(image_path => `<li><img src="{{ url_for('serve_images', filename='') }}' + image_path.split('/')[-1]}" alt="Product Image" style="max-width: 100px; max-height: 100px;"></li>`).join('')}
+                                </ul>
+                            ` : ''}
+                            <hr>
+                        `;
+                        modalProductList.appendChild(listItem);
+                    });
+                } else {
+                    modalProductList.innerHTML = '<p>Нет доступных кладов для этого товара в данном районе.</p>';
+                }
+
+            } catch (error) {
+                modalProductList.innerHTML = '<p>Ошибка загрузки кладов.</p>';
+                console.error('Ошибка при выполнении fetch запроса fetchProductDetails:', error);
+            }
+        }
+    </script>
+
+</body>
+</html>

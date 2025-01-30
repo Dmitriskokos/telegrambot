@@ -1,0 +1,8 @@
+aiogram==3.16.0
+aiohttp==3.9.3
+aiofiles==23.2.1
+python-dotenv==1.0.1
+flask
+flask-cors
+
+pip install aiosqlite amqp billiard bit celery coincurve exceptiongroup h11 httpcore httpx kombu prompt_toolkit pydantic pydantic_core python-dateutil python-telegram-bot redis sniffio typing_extensions vine wcwidth

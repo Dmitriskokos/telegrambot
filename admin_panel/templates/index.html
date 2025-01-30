@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Админ панель</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <style>
+        /* === Базовые стили (для всех экранов) === */
+        .product-description {
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            position: relative;
+        }
+
+        .product-description::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            width: 30%;
+            height: 20px;
+            background: linear-gradient(to right, rgba(255, 255, 255, 0), white 80%);
+        }
+
+        .content-section iframe {
+            display: none;
+            width: 100%;
+            min-height: 100vh;
+            border: none;
+        }
+
+        .content-section.active iframe {
+            display: block;
+        }
+
+        /* === Стили для БОКОВОГО МЕНЮ (для всех экранов) === */
+        aside {
+            width: 16rem;
+            background-color: #2d3748;
+            color: white;
+            padding: 1rem;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            z-index: 50;
+            overflow-y: auto;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        /* === Стили для ОСНОВНОГО КОНТЕНТА (для всех экранов) === */
+        #main-content {
+            flex-grow: 1;
+            padding: 1rem;
+            margin-left: 16rem;
+        }
+
+        /* === Кнопка МОБИЛЬНОГО МЕНЮ (для всех экранов, изначально скрыта на десктопе) === */
+        .mobile-menu-button {
+            background-color: #4a5568;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            z-index: 100;
+            display: none;
+            border: none;
+            font-size: 1rem;
+            line-height: 1;
+            text-align: center;
+        }
+
+
+        /* === Медиа-запрос для МОБИЛЬНЫХ УСТРОЙСТВ (ширина экрана до 767px) === */
+        @media (max-width: 767px) {
+            aside {
+                transform: translateX(-100%);
+            }
+
+            body.mobile-menu-open aside {
+                transform: translateX(0);
+            }
+
+            body.mobile-menu-open #main-content {
+                margin-left: 80%;
+            }
+
+            #main-content {
+                margin-left: 0;
+                padding-top: 0;
+            }
+
+            /* === Стили для КОНТЕЙНЕРА заголовка и кнопки на мобильных === */
+            .mobile-header-container {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 1rem;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                background-color: #f3f4f6;
+                z-index: 90;
+            }
+
+            /* === Стили для ЗАГОЛОВКА на мобильных === */
+            .mobile-header-container h1 {
+                text-align: left;
+                margin-bottom: 0;
+                font-size: 1.5rem;
+            }
+
+            /* === Позиционируем кнопку мобильного меню АБСОЛЮТНО внутри контейнера === */
+            .mobile-menu-button {
+                display: block;
+                position: static;
+                margin-top: 0;
+            }
+             /* === Сдвигаем контент вниз, чтобы не перекрывался фиксированным хедером === */
+            #product-list, #orders-content, #sold-orders-content, #add-product-content, #paid-products-content, #users-content, #orders-content-db, #wallets-content, #locations-content, #mass-message-content, #edit-product-content , #structured-products-content {
+                margin-top: 4rem;
+             }
+
+        }
+
+        /* === Медиа-запрос для ДЕСКТОПНЫХ УСТРОЙСТВ (ширина экрана от 768px) === */
+        @media (min-width: 768px) {
+            aside {
+                transform: translateX(0);
+            }
+        }
+
+        /* === Дополнительные стили для КАРТОЧКИ ТОВАРА (для всех экранов) === */
+        .product-card {
+            display: flex; /* Ensure product card is flex container */
+            flex-direction: column; /* Stack children vertically */
+            height: 100%; /* Make card take full height of its grid cell */
+        }
+
+        .product-card .p-4 {
+            flex-grow: 1; /* Allow content area to grow and take available space */
+            display: flex; /* Make content area flex container to control button position */
+            flex-direction: column; /* Stack content and buttons vertically within content area */
+            justify-content: space-between; /* Distribute space between content and buttons, pushing buttons to the bottom */
+        }
+
+        .product-card .mt-4.flex.flex-col.space-y-4 { /* Increased space-y to 4 */
+            margin-top: auto; /* Push buttons to the bottom of the content area */
+        }
+
+        /* === Стили для контейнера iframe редактора === */
+        #edit-product-content {
+            position: fixed; /* Фиксированное позиционирование */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Полупрозрачный фон */
+            z-index: 1000; /* Поверх всего контента */
+            display: none; /* Скрыт по умолчанию */
+            justify-content: center; /* Центрирование по горизонтали */
+            align-items: center; /* Центрирование по вертикали */
+            /* padding: 2rem;  Убрал padding, чтобы уменьшить размер модалки */
+            overflow: auto; /* Enable scroll if content overflows */
+        }
+
+        #edit-product-content.active {
+            display: flex; /* Включаем flex для центрирования, когда активен */
+        }
+
+        #edit-product-content iframe {
+            width: 90%; /* Ширина iframe 90% от родителя */
+            max-width: 900px; /* Уменьшил максимальную ширину iframe до 900px */
+            border: none;
+            border-radius: 0.5rem;
+            background-color: white; /* Белый фон для iframe */
+            display: block; /* Ensure iframe respects height: auto */
+        }
+
+
+        @media (max-width: 767px) {
+            #edit-product-content iframe {
+                width: 100%; /* На мобильных - 100% ширины */
+                max-height: 95%; /* Чуть больше места на мобильных */
+            }
+        }
+
+        /* === Стили для ПОДМЕНЮ === */
+        .has-submenu .submenu {
+            margin-top: 0.5rem;
+            padding-left: 1rem; /* Сдвиг подменю вправо */
+        }
+
+        .submenu-link {
+            font-size: 0.9rem;
+            padding-top: 0.4rem;
+            padding-bottom: 0.4rem;
+            display: block; /* Чтобы hover работал на всю ширину */
+        }
+
+
+    </style>
+</head>
+
+<body class="bg-gray-100 font-sans antialiased">
+    <div class="flex h-screen">
+        <!-- Боковое меню -->
+        <aside id="mobile-menu">
+            <div class="mb-8">
+                <a href="/" class="text-2xl font-bold text-center">THAI HUB ADMIN</a>
+            </div>
+            <nav class="flex-1">
+                <a href="#" class="block py-2 px-4 hover:bg-gray-700 rounded nav-link" data-target="products-content" data-title="Список товаров" id="products-menu-link">  <!-- Добавил ID для ссылки "Товары" -->
+                    <i class="fas fa-box-open mr-2"></i> Товары
+                </a>
+                <a href="#" class="block py-2 px-4 hover:bg-gray-700 rounded nav-link" data-target="orders-content" data-title="Все Заказы">
+                    <i class="fas fa-shopping-cart mr-2"></i> Все Заказы
+                </a>
+                <a href="#" class="block py-2 px-4 hover:bg-gray-700 rounded nav-link" data-target="sold-orders-content" data-title="Оплаченные Заказы">
+                    <i class="fas fa-check-circle mr-2"></i> Оплаченные
+                </a>
+                <a href="#" class="block py-2 px-4 hover:bg-gray-700 rounded nav-link" data-target="structured-products-content" data-title="Структурированные Клады">
+                    <i class="fas fa-list-alt mr-2"></i> Структурированные Клады
+                </a>
+                <a href="#" class="block py-2 px-4 hover:bg-gray-700 rounded nav-link" data-target="add-product-content" data-title="Добавить товар">
+                    <i class="fas fa-plus mr-2"></i> Добавить товар
+                </a>
+                <a href="#" class="block py-2 px-4 hover:bg-gray-700 rounded nav-link" data-target="paid-products-content" data-title="Редактор закладок">
+                    <i class="fas fa-bookmark mr-2"></i> Редактор закладок
+                </a>
+                <div class="has-submenu">  <!-- Заменили <a> на <div> -->
+                    <div class="block py-2 px-4 hover:bg-gray-700 rounded cursor-pointer" id="database-menu-toggle">  <!-- Кнопка для открытия подменю -->
+                        <i class="fas fa-database mr-2"></i> База Данных <i class="fas fa-caret-down ml-1 align-middle"></i> <!-- Добавили иконку стрелки -->
+                    </div>
+                    <div class="submenu hidden" id="database-submenu">  <!-- Подменю, изначально скрыто -->
+                        <a href="#" class="block py-2 px-6 hover:bg-gray-700 rounded submenu-link" data-target="users-content" data-title="Пользователи">Пользователи</a>
+                        <a href="#" class="block py-2 px-6 hover:bg-gray-700 rounded submenu-link" data-target="orders-content-db" data-title="Заказы">Заказы</a>
+                        <a href="#" class="block py-2 px-6 hover:bg-gray-700 rounded submenu-link" data-target="wallets-content" data-title="Кошельки">Кошельки</a>
+                        <a href="#" class="block py-2 px-6 hover:bg-gray-700 rounded submenu-link" data-target="locations-content" data-title="Локации">Локации</a>
+                    </div>
+                </div>
+                <a href="#" class="block py-2 px-4 hover:bg-gray-700 rounded nav-link" data-target="mass-message-content" data-title="Рассылка">
+                    <i class="fas fa-envelope mr-2"></i> Рассылка
+                </a>
+            </nav>
+            <div class="text-center mt-auto">
+                <a href="/logout" class="block py-2 px-4 hover:bg-gray-700 rounded"><i
+                        class="fas fa-sign-out-alt mr-2"></i>Выход</a>
+            </div>
+        </aside>
+
+        <!-- Основной контент -->
+        <main id="main-content">
+            <!-- === КОНТЕЙНЕР для заголовка и кнопки на мобильных === -->
+            <div class="mobile-header-container">
+                <h1 class="text-2xl font-bold mb-4" id="mobile-header-title">Список товаров</h1> <!-- Заголовок, добавил ID -->
+                <button class="mobile-menu-button" id="mobile-menu-toggle">
+                    <i class="fas fa-bars"></i> <span style="margin-left: 0.5rem;">Меню</span> <!-- Кнопка меню -->
+                </button>
+            </div>
+
+            <div id="products-content" class="content-section active" id="product-list">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6" >
+                    {% for product in products %}
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden product-card">
+                        <div class="relative">
+                            {% if product.image %}
+                            <img src="{{ product.image }}" alt="{{ product.name }}" class="w-full h-56 object-cover">
+                            {% else %}
+                            <img src="/static/default-image.jpg" alt="Default Product Image" class="w-full h-56 object-cover">
+                            {% endif %}
+                        </div>
+                        <div class="p-4 flex flex-col justify-between h-full">
+                            <div>
+                                <h2 class="text-xl font-semibold mb-2">{{ product.name }}</h2>
+                                <p class="text-gray-600 mb-1">ID: {{ product.id }}</p>
+                                <p class="text-gray-600 mb-1">Категория: <strong class="text-gray-800">{{ product.category_name }}</strong></p>
+                                <p class="text-gray-600 mb-1">Цена: <strong class="text-gray-800">{{ product.price }} USDT</strong></p>
+                                <p class="text-gray-700 mt-2 product-description">{{ product.description | safe }}</p>
+                            </div>
+                            <div class="mt-4 flex flex-col space-y-4">
+                            <button onclick="openEditProductIframe('{{ url_for('product', product_id=product.id) }}')" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-2 rounded focus:outline-none block text-center">Редактировать</button>
+                            <button
+                                class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded focus:outline-none block text-center delete-product-button"
+                                data-product-id="{{ product.id }}">Удалить</button>
+                            <a href="{{ url_for('delete_product', product_id=product.id) }}" id="delete-product-link-{{ product.id }}" class="hidden"></a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div id="orders-content" class="content-section hidden">
+                <iframe src="/test_orders" frameborder="0"></iframe>
+            </div>
+            <div id="sold-orders-content" class="content-section hidden">
+                <iframe src="/sold-orders-part2" frameborder="0"></iframe>
+            </div>
+            <div id="add-product-content" class="content-section hidden">
+                <iframe src="/product" frameborder="0"></iframe>
+            </div>
+            <div id="paid-products-content" class="content-section hidden">
+                <iframe src="/paid-products" frameborder="0"></iframe>
+            </div>
+            <div id="structured-products-content" class="content-section hidden">
+                <iframe src="/structured-products" frameborder="0"></iframe>
+            </div>
+            <div id="mass-message-content" class="content-section hidden">
+                <iframe src="/mass-message" frameborder="0"></iframe>
+            </div>
+            <!-- Контейнер для iframe редактора товара -->
+            <div id="edit-product-content" class="content-section hidden">
+                <iframe id="edit-product-iframe" src="" frameborder="0"></iframe>
+            </div>
+
+            <!-- Секции контента для Базы Данных -->
+            <div id="users-content" class="content-section hidden">
+                <h2>Пользователи</h2>
+                <iframe src="/admin?section=users" frameborder="0"></iframe>
+            </div>
+            <div id="orders-content-db" class="content-section hidden">
+                <h2>Заказы</h2>
+                <iframe src="/admin?section=orders" frameborder="0"></iframe>
+            </div>
+            <div id="wallets-content" class="content-section hidden">
+                <h2>Кошельки</h2>
+                <iframe src="/admin?section=wallets" frameborder="0"></iframe>
+            </div>
+            <div id="locations-content" class="content-section hidden">
+                <h2>Локации</h2>
+                <iframe src="/admin?section=locations" frameborder="0"></iframe>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Модальное окно подтверждения удаления -->
+    <div id="delete-confirmation-modal" class="content-section hidden fixed top-0 left-0 w-full h-full flex justify-center items-center bg-gray-500 bg-opacity-50 z-50">
+        <div class="bg-white p-6 rounded-md shadow-lg">
+            <h2 class="text-lg font-semibold mb-4">Подтверждение удаления</h2>
+            <p class="mb-4">Вы уверены, что хотите удалить этот товар?</p>
+            <div class="flex justify-end">
+                <button id="delete-cancel-button" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded focus:outline-none mr-2">Отмена</button>
+                <button id="delete-confirm-button" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none">Удалить</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuButton = document.getElementById('mobile-menu-toggle');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mainContent = document.getElementById('main-content');
+            const body = document.querySelector('body');
+            const mobileHeaderTitle = document.getElementById('mobile-header-title');
+            const productsMenuLink = document.getElementById('products-menu-link');
+
+            mobileMenuButton.addEventListener('click', function() {
+                body.classList.toggle('mobile-menu-open');
+            });
+
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    if (body.classList.contains('mobile-menu-open')) {
+                        body.classList.remove('mobile-menu-open');
+                    }
+
+                    const targetId = this.getAttribute('data-target');
+                    mainContent.querySelectorAll('.content-section').forEach(section => {
+                        section.classList.add('hidden');
+                        section.classList.remove('active');
+                    });
+                    document.getElementById(targetId).classList.remove('hidden');
+                    document.getElementById(targetId).classList.add('active');
+
+                    // === Обновляем заголовок при переключении контента ===
+                    const title = link.getAttribute('data-title');
+                    if (title) {
+                        mobileHeaderTitle.textContent = title;
+                    } else {
+                        mobileHeaderTitle.textContent = 'Админ панель';
+                    }
+                });
+            });
+
+            
+            const iframes = document.querySelectorAll('.content-section iframe');
+            iframes.forEach(iframe => {
+                iframe.addEventListener('load', function() {
+                    const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
+                    const homePageLinks = [];
+                    const allLinks = iframeDocument.querySelectorAll('a[href*="главная страница"], a[href*="main page"], a[href*="home page"]');
+                    allLinks.forEach(link => {
+                       const textContent = link.textContent.toLowerCase();
+                       if (textContent.includes("главная страница") || textContent.includes("main page") || textContent.includes("home page")) {
+                           homePageLinks.push(link);
+                        }
+                    });
+                    homePageLinks.forEach(link => {
+                        link.addEventListener('click', function(e) {
+                            e.preventDefault();
+                            productsMenuLink.click();
+                        });
+                    });
+                });
+            });
+
+
+            // === Устанавливаем заголовок по умолчанию при загрузке страницы ===
+            const initialNavLink = document.querySelector('.nav-link.active') || navLinks[0];
+            if (initialNavLink) {
+                 mobileHeaderTitle.textContent = initialNavLink.getAttribute('data-title') || 'Админ панель';
+            }
+
+            const deleteConfirmationModal = document.getElementById('delete-confirmation-modal');
+            const deleteConfirmButton = document.getElementById('delete-confirm-button');
+            const deleteCancelButton = document.getElementById('delete-cancel-button');
+            let productToDeleteId = null; // Переменная для хранения ID товара для удаления
+
+            // Обработчики для кнопок "Удалить" в карточках товаров
+            const deleteProductButtons = document.querySelectorAll('.delete-product-button');
+            deleteProductButtons.forEach(button => {
+                button.addEventListener('click', function(event) {
+                    event.preventDefault(); // Предотвращаем переход по ссылке
+                    productToDeleteId = this.getAttribute('data-product-id'); // Получаем ID товара для удаления
+                    deleteConfirmationModal.classList.remove('hidden'); // Показываем модальное окно
+                });
+            });
+
+            // Обработчик для кнопки "Удалить" в модальном окне
+            deleteConfirmButton.addEventListener('click', function() {
+                if (productToDeleteId) {
+                    const deleteLink = document.getElementById(`delete-product-link-${productToDeleteId}`);
+                    if (deleteLink) {
+                        deleteLink.click(); // Программный клик по скрытой ссылке для удаления
+                    }
+                    deleteConfirmationModal.classList.add('hidden'); // Скрываем модальное окно после удаления или отмены
+                    // Обновляем список товаров после удаления (можно просто перезагрузить страницу или обновить секцию товаров динамически)
+                    document.getElementById('products-menu-link').click(); // Обновляем список товаров
+                    productToDeleteId = null; // Сбрасываем ID товара для удаления
+                }
+            });
+
+            // Обработчик для кнопки "Отмена" в модальном окне
+            deleteCancelButton.addEventListener('click', function() {
+                deleteConfirmationModal.classList.add('hidden'); // Просто скрываем модальное окно
+                productToDeleteId = null; // Сбрасываем ID товара для удаления
+            });
+
+
+            const databaseMenuToggle = document.getElementById('database-menu-toggle');
+            const databaseSubmenu = document.getElementById('database-submenu');
+            const submenuLinks = document.querySelectorAll('.submenu-link');
+
+            databaseMenuToggle.addEventListener('click', function(e) {
+                e.preventDefault(); // Предотвращаем переход по ссылке (если бы это была ссылка)
+                databaseSubmenu.classList.toggle('hidden'); // Переключаем видимость подменю
+            });
+
+            submenuLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault(); // Предотвращаем переход по ссылке
+                    if (body.classList.contains('mobile-menu-open')) {
+                        body.classList.remove('mobile-menu-open');
+                    }
+                    databaseSubmenu.classList.add('hidden'); // Закрываем подменю после выбора пункта
+
+                    const targetId = this.getAttribute('data-target');
+                    mainContent.querySelectorAll('.content-section').forEach(section => {
+                        section.classList.add('hidden');
+                        section.classList.remove('active');
+                    });
+                    document.getElementById(targetId).classList.remove('hidden');
+                    document.getElementById(targetId).classList.add('active');
+
+                    // === Обновляем заголовок при переключении контента ===
+                    const title = link.getAttribute('data-title');
+                    if (title) {
+                        mobileHeaderTitle.textContent = title;
+                    } else {
+                        mobileHeaderTitle.textContent = 'Админ панель';
+                    }
+
+                    // === Загрузка контента в iframe ===
+                    if (targetId === 'users-content') {
+    loadIframeContent('users-content', 'users');
+} else if (targetId === 'orders-content-db') {
+    loadIframeContent('orders-content-db', 'orders');
+} else if (targetId === 'wallets-content') {
+    loadIframeContent('wallets-content', 'wallets');
+} else if (targetId === 'locations-content') {
+    loadIframeContent('locations-content', 'locations');
+} else if (targetId === 'structured-products-content') {
+    loadIframeContent('structured-products-content', 'structured-products'); // <-- Добавлено для structured-products
+}
+                });
+            });
+
+            function loadIframeContent(contentId, section) {
+    let iframe = document.querySelector(`#${contentId} iframe`);
+    let iframeSrc = `/admin`;
+    if (section === 'structured-products') { // <-- Добавлено для structured-products
+        iframeSrc = `/structured-products`;
+    }
+    else if (section) {
+        iframeSrc += `?section=${section}`;
+    }
+    if (!iframe) {
+        iframe = document.createElement('iframe');
+        iframe.src = iframeSrc;
+        iframe.frameBorder = 0;
+        document.getElementById(contentId).appendChild(iframe);
+    } else if (iframe.src !== iframeSrc) { // Проверяем, нужно ли обновлять src
+        iframe.src = iframeSrc;
+    }
+}
+        });
+
+        function openEditProductIframe(iframeSrc) {
+            const editProductContent = document.getElementById('edit-product-content');
+            const editProductIframe = document.getElementById('edit-product-iframe');
+
+            editProductIframe.src = iframeSrc;
+            editProductContent.classList.add('active');
+        }
+
+        function closeEditProductIframe() {
+            const editProductContent = document.getElementById('edit-product-content');
+            const editProductIframe = document.getElementById('edit-product-iframe');
+
+            editProductIframe.src = ""; // Очищаем src для сброса iframe, если нужно
+            editProductContent.classList.remove('active');
+        }
+
+        // ===  Слушатель сообщений от iframe ===
+        window.addEventListener('message', function(event) {
+            if (event.data === 'closeModal') {
+                closeEditProductIframe();
+            } else if (event.data === 'productSaved') {
+                closeEditProductIframe(); // Сначала закроем модалку
+                document.getElementById('products-menu-link').click(); // Потом "кликнем" на меню товары для обновления
+            }
+        });
+    </script>
+</body>
+
+</html>

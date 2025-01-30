@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}Выбор района в городе {{ city_name }}{% endblock %}
+{% block page_title %}Выбор района в городе <span class="font-semibold">{{ city_name }}</span>{% endblock %}
+
+{% block content %}
+    <div class="mb-4 flex space-x-2">
+        <a href="{{ url_for('index') }}" class="button button-secondary button-small flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18"/></svg>
+            Назад к выбору городов
+        </a>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {% for district, bookmark_count in districts %}
+            <div class="product-card">
+                <span class="product-badge">{{ bookmark_count }}</span>
+                 <h3 class="product-title">
+                    <a href="{{ url_for('product_list', city_name=city_name, district_name=district) }}" class="product-link">
+                        {{ district }}
+                    </a>
+                </h3>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

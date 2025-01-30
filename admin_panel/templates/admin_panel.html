@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Упрощенная Админ Панель</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        .header .logo {
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+
+        .sidebar {
+            width: 200px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            height: 100vh;
+            overflow-y: auto;
+            position: fixed;
+            top: 50px;
+            left: 0;
+            transition: left 0.3s ease;
+            z-index: 1001;
+        }
+
+        .sidebar h2 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .sidebar .nav-link {
+            cursor: pointer;
+            padding: 10px 0;
+            margin-bottom: 5px;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .sidebar .nav-link:hover {
+            background-color: #e9ecef;
+        }
+
+        .content {
+            flex: 1;
+            padding: 15px;
+            min-height: auto;
+            height: auto;
+            margin-top: 50px;
+            margin-left: 200px;
+            transition: margin-left 0.3s ease;
+        }
+
+        .content.sidebar-active {
+            margin-left: 0;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        .table th {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 150px;
+        }
+
+        .table td {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 150px;
+        }
+
+        .hidden-table {
+            display: none
+        }
+
+        .inactive-table {
+            display: none;
+        }
+
+        .active-table {
+            display: block;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+        }
+
+        .action-buttons button {
+            font-size: 0.8rem;
+            padding: 5px 8px;
+        }
+
+        @media (max-width: 767px) {
+            .header {
+                padding: 5px;
+            }
+
+            .header .logo {
+                font-size: 1.1rem;
+            }
+
+            .sidebar {
+                width: 80%;
+                position: fixed;
+                height: 100%;
+                overflow-y: auto;
+                padding: 10px;
+                top: 50px;
+                left: -80%;
+                z-index: 1001;
+                background-color: #f8f9fa;
+                transition: left 0.3s ease;
+            }
+
+            .sidebar.active {
+                left: 0;
+            }
+
+            .content {
+                padding: 10px;
+                margin-top: 50px;
+                margin-left: 0;
+            }
+
+            .table th,
+            .table td {
+                font-size: 0.9rem;
+                max-width: none;
+                width: auto;
+                display: block;
+                padding: 0.6rem 0.75rem;
+                text-align: left;
+                border-bottom: 1px solid #eee;
+                margin-bottom: 0;
+            }
+
+            .table thead {
+                display: none;
+            }
+
+            .table tr {
+                margin-bottom: 0.7rem;
+                border: 1px solid #ccc;
+                display: block;
+                padding: 0.75rem;
+            }
+
+            .table td::before {
+                content: attr(data-label);
+                font-weight: bold;
+                display: block;
+                margin-bottom: 0.4rem;
+                font-size: 1rem;
+            }
+
+            #menu-toggle {
+                display: none;
+            }
+        }
+
+        @media (max-width: 767px) {
+            #menu-toggle {
+                display: block;
+                position: fixed;
+                top: 10px;
+                right: 10px;
+                font-size: 24px;
+                cursor: pointer;
+                z-index: 1001;
+                background-color: #fff;
+                border: 1px solid #ccc;
+                padding: 5px 10px;
+                border-radius: 5px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <div class="logo">THAI HUB</div>
+        <div id="menu-toggle">☰</div>
+    </div>
+
+
+    <!-- Modal for Add/Edit Wallet -->
+    <div class="modal fade" id="walletModal" tabindex="-1" role="dialog" aria-labelledby="walletModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="walletModalLabel">Добавить / Редактировать Кошелек</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="walletForm">
+                        <input type="hidden" id="walletId" value="">
+                        <div class="mb-3">
+                            <label for="walletType" class="form-label">Тип кошелька</label>
+                            <select class="form-control" id="walletType" disabled>
+                                <option value="usdt_trc20">USDT TRC20</option>
+                                <option value="usdt_bep20">USDT BEP20</option>
+                                <option value="bitcoin">BITCOIN</option>
+                                <option value="eth">ETH</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="walletAddress" class="form-label">Адрес Кошелька</label>
+                            <input type="text" class="form-control" id="walletAddress" required>
+                        </div>
+                        <div id="wallet-error-message" class="text-danger" style="display: none;"></div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-primary" id="saveWalletButton">Сохранить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal for Edit User Balance -->
+     <div class="modal fade" id="balanceModal" tabindex="-1" role="dialog" aria-labelledby="balanceModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="balanceModalLabel">Редактировать Баланс Пользователя</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="balanceForm">
+                        <input type="hidden" id="balanceUserId" value="">
+                        <div class="mb-3">
+                            <label for="newBalance" class="form-label">Новый Баланс</label>
+                            <input type="number" class="form-control" id="newBalance" required>
+                        </div>
+                        <div id="balance-error-message" class="text-danger" style="display: none;"></div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-primary" id="saveBalanceButton">Сохранить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="sidebar">
+        <h2>Админ Панель</h2>
+        <nav class="nav flex-column">
+            <a class="nav-link" data-target="#users-table">Пользователи</a>
+            <a class="nav-link" data-target="#orders-table">Заказы</a>
+            <a class="nav-link" data-target="#wallets-table">Кошельки</a>
+            <a class="nav-link" data-target="#locations-table">Локации</a>
+
+        </nav>
+    </div>
+
+    <div class="content">
+
+        <div class="table-container active-table" id="users-table">
+            <h2>Пользователи</h2>
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Имя</th>
+                            <th>Реферальный Код</th>
+                            <th>Баланс</th>
+                            <th>Реферер</th>
+                            <th>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody id="users-table-body">
+                       
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="table-container inactive-table" id="orders-table">
+            <h2>Заказы</h2>
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>ID Пользователя</th>
+                            <th>Название Продукта</th>
+                            <th>Категория</th>
+                            <th>Город</th>
+                            <th>Район</th>
+                            <th>Количество</th>
+                            <th>ID Платежа</th>
+                            <th>Статус</th>
+                             <th>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody id="orders-table-body">
+                      
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="table-container inactive-table" id="wallets-table">
+            <h2>Кошельки</h2>
+            <div class="wallet-category" id="usdt-trc20-wallets">
+                <h3>USDT TRC20</h3>
+                <button type="button" class="btn btn-success btn-sm mb-2" onclick="openWalletModal('usdt_trc20')">Добавить
+                    новый кошелек</button>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Название</th>
+                                <th>Адрес</th>
+                                <th>Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usdt-trc20-wallets-body">
+                            <!-- Кошельки USDT TRC20 будут добавлены сюда -->
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="wallet-category" id="usdt-bep20-wallets">
+                <h3>USDT BEP20</h3>
+                <button type="button" class="btn btn-success btn-sm mb-2" onclick="openWalletModal('usdt_bep20')">Добавить
+                    новый кошелек</button>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Название</th>
+                                <th>Адрес</th>
+                                <th>Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usdt-bep20-wallets-body">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="wallet-category" id="bitcoin-wallets">
+                <h3>BITCOIN</h3>
+                <button type="button" class="btn btn-success btn-sm mb-2" onclick="openWalletModal('bitcoin')">Добавить
+                    новый кошелек</button>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Название</th>
+                                <th>Адрес</th>
+                                <th>Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bitcoin-wallets-body">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+             <div class="wallet-category" id="eth-wallets">
+                <h3>ETH</h3>
+                <button type="button" class="btn btn-success btn-sm mb-2" onclick="openWalletModal('eth')">Добавить
+                    новый кошелек</button>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Название</th>
+                                <th>Адрес</th>
+                                <th>Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody id="eth-wallets-body">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="table-container inactive-table" id="locations-table">
+            <h2>Локации</h2>
+            <button type="button" class="btn btn-success btn-sm mb-2" onclick="openLocationModal()">Добавить новую локацию</button>
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Город</th>
+                            <th>Район</th>
+                             <th>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody id="locations-table-body">
+                         <!-- Локации будут добавлены сюда -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    <!-- Modal for Add/Edit Location -->
+    <div class="modal fade" id="locationModal" tabindex="-1" role="dialog" aria-labelledby="locationModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="locationModalLabel">Добавить / Редактировать Локацию</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="locationForm">
+                        <input type="hidden" id="locationId" value="">
+                        <div class="mb-3">
+                            <label for="locationCity" class="form-label">Город</label>
+                            <input type="text" class="form-control" id="locationCity" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="locationDistrict" class="form-label">Район</label>
+                            <input type="text" class="form-control" id="locationDistrict" required>
+                        </div>
+                          <div id="location-error-message" class="text-danger" style="display: none;"></div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-primary" id="saveLocationButton">Сохранить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+                   console.log('DOMContentLoaded');
+                   const navLinks = document.querySelectorAll('.sidebar .nav-link');
+                   const contentArea = document.querySelector('.content');
+                   const menuToggle = document.getElementById('menu-toggle');
+                   const sidebar = document.querySelector('.sidebar');
+       
+                   menuToggle.addEventListener('click', function () {
+                       sidebar.classList.toggle('active');
+                       contentArea.classList.toggle('sidebar-active');
+                   });
+       
+                   navLinks.forEach(function (link) {
+                       link.addEventListener('click', function (event) {
+                           event.preventDefault();
+                           sidebar.classList.remove('active');
+                           contentArea.classList.remove('sidebar-active');
+                           const tableId = this.getAttribute('data-target');
+       
+                           const allTables = contentArea.querySelectorAll('.table-container');
+                           allTables.forEach(function (table) {
+                               table.style.display = 'none';
+                           });
+       
+                           const targetTable = contentArea.querySelector(tableId);
+                           if (targetTable) {
+                               targetTable.style.display = 'block';
+                           }
+                           
+                           // Fetch and render data when a tab is clicked
+                           if (tableId === '#users-table') {
+                             fetchAndRenderUsers();
+                            } else if (tableId === '#orders-table') {
+                                fetchAndRenderOrders();
+                            } else if (tableId === '#wallets-table') {
+                              fetchAndRenderWallets();
+                           }
+                       });
+                   });
+                   
+                 // Fetch and render data on initial page load (default to users table)
+                   fetchAndRenderUsers();
+                
+                  
+               });
+       
+           let currentWalletId = null;
+               let currentBalanceUserId = null;
+       
+               async function deleteOrder(orderId) {
+                try {
+                    const response = await fetch(`/delete-order/${orderId}`, {
+                    method: 'DELETE',
+                    });
+
+                    if (response.ok) {
+                        console.log(`Order with ID ${orderId} has been deleted.`);
+                        fetchAndRenderOrders(); // Обновляем таблицу заказов после удаления
+                    }
+                    else {
+                        const text = await response.text();
+                        console.error('Error deleting order:', response.status, text);
+                    }
+                    }
+                catch (error) {
+                    console.error('Error deleting order:', error);
+                }
+            }
+             
+                 async function deleteWallet(walletId) {
+                       try {
+                            const response = await fetch(`/delete-wallet/${walletId}`, {
+                                method: 'DELETE',
+                            });
+       
+                           if (response.ok) {
+                              console.log(`Кошелек с ID ${walletId} удален`);
+                                fetchAndRenderWallets();
+                          }
+                          else {
+                              const text = await response.text();
+                              console.error('Ошибка при удалении кошелька:', response.status, text);
+                          }
+                      } catch (error) {
+                         console.error('Ошибка при удалении кошелька:', error);
+                     }
+                 }
+       
+        function openWalletModal(walletType, walletId = null, walletAddress = null) {
+                   currentWalletId = walletId;
+                   const walletModal = new bootstrap.Modal(document.getElementById('walletModal'));
+                   document.getElementById('walletType').value = walletType;
+                   document.getElementById('walletAddress').value = walletAddress || '';
+                   document.getElementById('walletId').value = walletId || '';
+                   document.getElementById('wallet-error-message').style.display = 'none';
+                   walletModal.show();
+               }
+       
+               document.getElementById('saveWalletButton').addEventListener('click', () => {
+                   const walletType = document.getElementById('walletType').value;
+                   const walletAddress = document.getElementById('walletAddress').value;
+                   const walletId = document.getElementById('walletId').value;
+                   if (walletId) {
+                       saveWalletChanges(walletId, walletAddress);
+                   } else {
+                       addWallet(walletType, walletAddress);
+                   }
+               });
+       
+           async function addWallet(walletType, address) {
+                   try {
+                       const response = await fetch('/add-wallet', {
+                           method: 'POST',
+                           headers: {
+                               'Content-Type': 'application/json',
+                           },
+                           body: JSON.stringify({
+                               name: walletType,
+                               address: address
+                           }),
+                       });
+       
+                      if(response.ok){
+                          const data = await response.json();
+                          const walletModal = bootstrap.Modal.getInstance(document.getElementById('walletModal'));
+                          console.log(data.message);
+                          walletModal.hide();
+                          fetchAndRenderWallets();
+                       }
+                      else {
+                          const text = await response.text();
+                          document.getElementById('wallet-error-message').textContent = 'Ошибка при добавлении кошелька: ' + text;
+                          document.getElementById('wallet-error-message').style.display = 'block';
+                           console.error('Ошибка при добавлении кошелька:', response.status, text);
+                      }
+                   }
+                    catch (error) {
+                        console.error('Ошибка при добавлении кошелька:', error);
+                    }
+               }
+       
+           async function saveWalletChanges(walletId, walletAddress) {
+                   try {
+                       const response = await fetch(`/update-wallet/${walletId}`, {
+                           method: 'PUT',
+                           headers: {
+                               'Content-Type': 'application/json',
+                           },
+                           body: JSON.stringify({
+                               wallet_address: walletAddress
+                           }),
+                       });
+                       if(response.ok){
+                            const walletModal = bootstrap.Modal.getInstance(document.getElementById('walletModal'));
+                          walletModal.hide();
+                           fetchAndRenderWallets();
+                       }
+                        else {
+                           const text = await response.text();
+                            document.getElementById('wallet-error-message').textContent = 'Ошибка при изменении кошелька: ' + text;
+                           document.getElementById('wallet-error-message').style.display = 'block';
+                           console.error('Ошибка при изменении кошелька:', response.status, text);
+                       }
+                   }
+                    catch (error) {
+                       console.error('Ошибка при изменении кошелька:', error);
+                   }
+               }
+       async function fetchAndRenderWallets() {
+           try {
+               const response = await fetch('/wallets')
+               if (!response.ok) {
+                   console.error('Ошибка при получении кошельков:', response.status);
+                   return
+               }
+               const wallets = await response.json();
+               console.log('WALLETS: ', wallets);
+       
+               const usdtTrc20Body = document.getElementById('usdt-trc20-wallets-body');
+               const usdtBep20Body = document.getElementById('usdt-bep20-wallets-body');
+               const bitcoinBody = document.getElementById('bitcoin-wallets-body');
+               const ethBody = document.getElementById('eth-wallets-body');
+       
+               usdtTrc20Body.innerHTML = '';
+               usdtBep20Body.innerHTML = '';
+               bitcoinBody.innerHTML = '';
+               ethBody.innerHTML = '';
+       
+               if (!wallets || wallets.length === 0) {
+                   usdtTrc20Body.innerHTML = '<tr><td colspan="4">Нет данных о кошельках.</td></tr>'
+                   usdtBep20Body.innerHTML = '<tr><td colspan="4">Нет данных о кошельках.</td></tr>'
+                   bitcoinBody.innerHTML = '<tr><td colspan="4">Нет данных о кошельках.</td></tr>'
+                   ethBody.innerHTML = '<tr><td colspan="4">Нет данных о кошельках.</td></tr>'
+                   return;
+               }
+       
+               wallets.forEach(wallet => {
+                   const walletCurrencyUpper = wallet.currency.toUpperCase();
+       
+                   let row = `<tr id="wallet-row-${wallet.id}">
+                                       <td data-label="ID">${wallet.id}</td>
+                                       <td data-label="Название">${wallet.currency}</td>
+                                        <td data-label="Адрес" id="walletAddressCell-${wallet.id}">${wallet.wallet_address}</td>
+                                        <td>
+                                          <div class="action-buttons">
+                                                <button type="button" class="btn btn-primary btn-sm" onclick="openWalletModal('${wallet.currency}', '${wallet.id}', '${wallet.wallet_address}')">Редактировать</button>
+                                                <button type="button" class="btn btn-danger btn-sm" onclick="deleteWallet('${wallet.id}')">Удалить</button>
+                                          </div>
+                                      </td>
+                                   </tr>`;
+       
+                   if (walletCurrencyUpper === 'USDT_TRC20') {
+                       usdtTrc20Body.innerHTML += row;
+                   } else if (walletCurrencyUpper === 'USDT_BEP20') {
+                       usdtBep20Body.innerHTML += row;
+                   } else if (walletCurrencyUpper === 'BITCOIN') {
+                       bitcoinBody.innerHTML += row;
+                   } else if (walletCurrencyUpper === 'ETH') {
+                       ethBody.innerHTML += row;
+                   }
+               });
+           } catch (error) {
+               console.error('Ошибка при получении и отображении кошельков:', error)
+           }
+       }
+       
+        function openBalanceModal(userId, userBalance) {
+                   currentBalanceUserId = userId;
+                   const balanceModal = new bootstrap.Modal(document.getElementById('balanceModal'));
+                   document.getElementById('newBalance').value = userBalance;
+                   document.getElementById('balanceUserId').value = userId;
+                   document.getElementById('balance-error-message').style.display = 'none';
+                   balanceModal.show();
+               }
+           document.getElementById('saveBalanceButton').addEventListener('click', async() => {
+                   const userId = document.getElementById('balanceUserId').value;
+                   const newBalance = document.getElementById('newBalance').value;
+                   try {
+                       const response = await fetch(`/update-user-balance/${userId}`,{
+                           method: 'PUT',
+                               headers: {
+                           'Content-Type': 'application/json',
+                               },
+                               body: JSON.stringify({
+                                   new_balance: newBalance
+                                   }),
+                       });
+                       if(response.ok) {
+                           const balanceModal = bootstrap.Modal.getInstance(document.getElementById('balanceModal'));
+                           balanceModal.hide();
+                           
+                           const balanceCell = document.getElementById(`user-balance-${userId}`);
+                               if(balanceCell){
+                               balanceCell.textContent = newBalance;
+                               }
+                               
+                       }
+                       else {
+                           const text = await response.text();
+                           document.getElementById('balance-error-message').textContent = 'Ошибка при изменении баланса: ' + text;
+                           document.getElementById('balance-error-message').style.display = 'block';
+                           console.error('Ошибка при изменении баланса:', response.status, text);
+                           }
+                   }
+                   catch(error){
+                       console.error('Ошибка при изменении баланса:', error);
+                   }
+               });
+       
+       
+async function fetchAndRenderUsers() {
+    try {
+        const response = await fetch('/users');
+        if (!response.ok) {
+            console.error('Ошибка при получении пользователей:', response.status);
+            return;
+        }
+        const users = await response.json();
+        const usersTableBody = document.getElementById('users-table-body');
+        usersTableBody.innerHTML = '';
+        if (!users || users.length === 0) {
+            usersTableBody.innerHTML = '<tr><td colspan="6">Нет данных о пользователях.</td></tr>';
+            return;
+        }
+        users.forEach(user => {
+            let row = `<tr id="user-row-${user.user_id}">
+            <td data-label="ID">${user.user_id}</td>
+            <td data-label="Имя">
+            ${user.username ? user.username : user.user_id}
+            </td>
+            <td data-label="Реферальный Код">${user.referral_code}</td>
+            <td data-label="Баланс" id="user-balance-${user.user_id}">${user.balance}</td>
+            <td data-label="Реферер">${user.referred_by}</td>
+            <td data-label="Действия">
+                <button type="button" class="btn btn-primary btn-sm" onclick="openBalanceModal('${user.user_id}', ${user.balance})">Изменить баланс</button>
+            </td>
+            </tr>`;
+            usersTableBody.innerHTML += row;
+        });
+        fetchAndRenderWallets();
+    } catch (error) {
+        console.error('Ошибка при получении и отображении пользователей:', error);
+    }
+}
+
+async function fetchAndRenderOrders() {
+    try {
+        const response = await fetch('/orders');
+        if (!response.ok) {
+            console.error('Ошибка при получении заказов: ', response.status);
+            return;
+        }
+
+        const data = await response.json();
+         const orders = data.orders;
+        const ordersTableBody = document.getElementById('orders-table-body');
+        ordersTableBody.innerHTML = '';
+
+        if (!orders || orders.length === 0) {
+            ordersTableBody.innerHTML = '<tr><td colspan="10">Нет данных о заказах.</td></tr>';
+            return;
+        }
+
+        orders.forEach(order => {
+            let row = `
+                <tr id="order-row-${order.id}">
+                <td data-label="ID">${order.id}</td>
+                <td data-label="ID Пользователя">${order.user_id}</td>
+                <td data-label="Название Продукта">${order.product_name}</td>
+                <td data-label="Категория">${order.category}</td>
+                <td data-label="Город">${order.city}</td>
+                <td data-label="Район">${order.district}</td>
+                <td data-label="Количество">${order.quantity}</td>
+                <td data-label="ID Платежа">${order.payment_id}</td>
+                <td data-label="Статус">${order.status}</td>
+                <td data-label="Действия">
+                    <button type="button" class="btn btn-danger btn-sm" onclick="deleteOrder('${order.id}')">Удалить</button>
+                </td>
+                </tr>
+            `;
+            ordersTableBody.innerHTML += row;
+        });
+    }
+     catch (error) {
+        console.error('Ошибка при получении и отображении заказов:', error);
+    }
+}
+
+let currentLocatioId = null;
+  function openLocationModal(locationId = null, city = null, district = null) {
+        currentLocatioId = locationId;
+        const locationModal = new bootstrap.Modal(document.getElementById('locationModal'));
+        document.getElementById('locationCity').value = city || '';
+        document.getElementById('locationDistrict').value = district || '';
+        document.getElementById('locationId').value = locationId || '';
+          document.getElementById('location-error-message').style.display = 'none';
+        locationModal.show();
+   }
+
+    document.getElementById('saveLocationButton').addEventListener('click', () => {
+          const city = document.getElementById('locationCity').value;
+          const district = document.getElementById('locationDistrict').value;
+          const locationId = document.getElementById('locationId').value;
+            if(locationId) {
+              saveLocationChanges(locationId, city, district)
+            }
+           else {
+               addLocation(city, district);
+           }
+    });
+
+   async function addLocation(city, district) {
+         try {
+               const response = await fetch('/add-location', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                      city: city,
+                      district: district
+                    }),
+                });
+             if(response.ok){
+                const data = await response.json();
+                 console.log(data.message);
+                 const locationModal = bootstrap.Modal.getInstance(document.getElementById('locationModal'));
+                 locationModal.hide();
+                  fetchAndRenderLocations();
+                 }
+                else {
+                     const text = await response.text();
+                    document.getElementById('location-error-message').textContent = 'Ошибка при добавлении локации: ' + text;
+                     document.getElementById('location-error-message').style.display = 'block';
+                     console.error('Ошибка при добавлении локации:', response.status, text);
+                 }
+             }
+             catch (error) {
+                 console.error('Ошибка при добавлении локации:', error);
+             }
+   }
+  async function saveLocationChanges(locationId, city, district) {
+        try {
+              const response = await fetch(`/update-location/${locationId}`, {
+                    method: 'PUT',
+                    headers: {
+                         'Content-Type': 'application/json',
+                   },
+                    body: JSON.stringify({
+                        city: city,
+                       district: district
+                  }),
+            });
+            if(response.ok){
+                 const locationModal = bootstrap.Modal.getInstance(document.getElementById('locationModal'));
+                locationModal.hide();
+                fetchAndRenderLocations();
+            }
+           else {
+               const text = await response.text();
+                document.getElementById('location-error-message').textContent = 'Ошибка при изменении локации: ' + text;
+                document.getElementById('location-error-message').style.display = 'block';
+                 console.error('Ошибка при изменении локации:', response.status, text);
+          }
+        } catch (error) {
+             console.error('Ошибка при изменении локации:', error);
+         }
+   }
+     async function deleteLocation(locationId) {
+       try {
+           const response = await fetch(`/delete-location/${locationId}`, {
+                method: 'DELETE',
+           });
+           if (response.ok) {
+              console.log(`Локация с ID ${locationId} удалена`);
+               fetchAndRenderLocations();
+          } else {
+             const text = await response.text();
+             console.error('Ошибка при удалении локации:', response.status, text);
+         }
+        }
+        catch (error) {
+           console.error('Ошибка при удалении локации:', error);
+       }
+   }
+
+
+    async function fetchAndRenderLocations() {
+      console.log("fetchAndRenderLocations started");
+        try {
+           const response = await fetch('/locations');
+            console.log("fetchAndRenderLocations response", response);
+            if (!response.ok) {
+                console.error('Ошибка при получении локаций:', response.status);
+                return;
+            }
+           const data = await response.json();
+            const locations = data.locations;
+            console.log('LOCATIONS: ', locations);
+            const locationsTableBody = document.getElementById('locations-table-body');
+            locationsTableBody.innerHTML = '';
+
+            if (!locations || locations.length === 0) {
+                 locationsTableBody.innerHTML = '<tr><td colspan="4">Нет данных о локациях.</td></tr>';
+                return;
+            }
+
+            locations.forEach(location => {
+                let row = `<tr id="location-row-${location.id}">
+                                    <td data-label="ID">${location.id}</td>
+                                    <td data-label="Город">${location.city}</td>
+                                    <td data-label="Район">${location.district}</td>
+                                    <td data-label="Действия">
+                                        <div class="action-buttons">
+                                            <button type="button" class="btn btn-primary btn-sm" onclick="openLocationModal('${location.id}', '${location.city}', '${location.district}')">Редактировать</button>
+                                            <button type="button" class="btn btn-danger btn-sm" onclick="deleteLocation('${location.id}')">Удалить</button>
+                                        </div>
+                                    </td>
+                                </tr>`;
+                    locationsTableBody.innerHTML += row;
+           });
+        }
+        catch (error) {
+             console.error('Ошибка при получении и отображении локаций:', error);
+        }
+    }
+
+
+    // Вызов функции для загрузки локаций при загрузке вкладки
+    document.addEventListener('DOMContentLoaded', function() {
+         const navLinks = document.querySelectorAll('.sidebar .nav-link');
+         navLinks.forEach(function (link) {
+             link.addEventListener('click', function (event) {
+                   event.preventDefault();
+                   const tableId = this.getAttribute('data-target');
+                   if (tableId === '#locations-table') {
+                        fetchAndRenderLocations();
+                   }
+             });
+       });
+    });
+       </script>
+</body>
+
+</html>

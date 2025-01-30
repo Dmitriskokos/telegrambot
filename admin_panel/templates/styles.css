@@ -1,0 +1,122 @@
+body {
+    font-family: sans-serif;
+    margin: 20px;
+}
+
+/* Styles for the confirmation dialog */
+.confirm-deletion {
+    border: 1px solid #ccc;
+    padding: 15px;
+    margin-bottom: 20px;
+    background-color: #f9f9f9;
+}
+
+.confirm-deletion p {
+    margin-bottom: 10px;
+}
+
+.confirm-deletion button {
+    padding: 8px 15px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.confirm-deletion button#yes {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+}
+
+.confirm-deletion button#no {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+}
+
+/* Styles for the Admin Panel links */
+.admin-panel-links {
+    margin-bottom: 20px;
+}
+
+.admin-panel-links a {
+    margin-right: 10px;
+    text-decoration: none;
+    color: #007bff;
+}
+
+.admin-panel-links a:hover {
+    text-decoration: underline;
+}
+
+/* Styles for the Products table */
+.products-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.products-table th, .products-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.products-table th {
+    background-color: #f2f2f2;
+}
+
+/* Styles for the Edit Product forms */
+.edit-product {
+    border: 1px solid #ccc;
+    padding: 15px;
+    margin-bottom: 20px;
+    background-color: #fff;
+}
+
+.edit-product h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.edit-product label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.edit-product input[type="text"],
+.edit-product input[type="number"],
+.edit-product textarea,
+.edit-product select {
+    width: calc(100% - 12px); /* Adjust for padding */
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    box-sizing: border-box;
+}
+
+.edit-product textarea {
+    resize: vertical;
+}
+
+.edit-product .buttons {
+    text-align: right;
+}
+
+.edit-product button {
+    padding: 8px 15px;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.edit-product button[type="button"] {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+}
+
+.edit-product button[type="submit"] {
+    background-color: #007bff;
+    color: white;
+    border: none;
+}

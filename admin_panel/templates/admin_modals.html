@@ -1,0 +1,124 @@
+
+    <!-- Modal for Add/Edit Wallet -->
+    <div class="fixed z-50 inset-0 hidden overflow-y-auto" id="walletModal" aria-labelledby="walletModalLabel" role="dialog" aria-modal="true">
+        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true" id="modal-overlay"></div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">​</span>
+            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-md sm:w-full" role="document">
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div class="sm:flex sm:items-start">
+                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900" id="walletModalLabel">
+                                Добавить / Редактировать Кошелек
+                            </h3>
+                        </div>
+                    </div>
+                    <div class="mt-2">
+                        <form id="walletForm">
+                            <input type="hidden" id="walletId" value="">
+                            <div class="mb-4">
+                                <label for="walletType" class="block text-gray-700 text-sm font-bold mb-2">Тип кошелька</label>
+                                <select class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="walletType" disabled>
+                                    <option value="usdt_trc20">USDT TRC20</option>
+                                    <option value="usdt_bep20">USDT BEP20</option>
+                                    <option value="bitcoin">BITCOIN</option>
+                                    <option value="eth">ETH</option>
+                                </select>
+                            </div>
+                            <div class="mb-4">
+                                <label for="walletAddress" class="block text-gray-700 text-sm font-bold mb-2">Адрес Кошелька</label>
+                                <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="walletAddress" required>
+                            </div>
+                            <div id="wallet-error-message" class="text-red-500 mt-2 hidden"></div>
+                        </form>
+                    </div>
+                </div>
+                <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                    <button type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm" id="saveWalletButton">
+                        Сохранить
+                    </button>
+                    <button type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" onclick="closeModal('walletModal')">
+                        Отмена
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Edit User Balance -->
+     <div class="fixed z-50 inset-0 hidden overflow-y-auto" id="balanceModal" aria-labelledby="balanceModalLabel" role="dialog" aria-modal="true">
+        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true" id="modal-overlay-balance"></div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">​</span>
+            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-md sm:w-full" role="document">
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div class="sm:flex sm:items-start">
+                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900" id="balanceModalLabel">
+                                Редактировать Баланс Пользователя
+                            </h3>
+                        </div>
+                    </div>
+                    <div class="mt-2">
+                        <form id="balanceForm">
+                            <input type="hidden" id="balanceUserId" value="">
+                            <div class="mb-4">
+                                <label for="newBalance" class="block text-gray-700 text-sm font-bold mb-2">Новый Баланс</label>
+                                <input type="number" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="newBalance" required>
+                            </div>
+                            <div id="balance-error-message" class="text-red-500 mt-2 hidden"></div>
+                        </form>
+                    </div>
+                </div>
+                <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                    <button type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm" id="saveBalanceButton">
+                        Сохранить
+                    </button>
+                    <button type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" onclick="closeModal('balanceModal')">
+                        Отмена
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Add/Edit Location -->
+    <div class="fixed z-50 inset-0 hidden overflow-y-auto" id="locationModal" aria-labelledby="locationModalLabel" role="dialog" aria-modal="true">
+        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true" id="modal-overlay-location"></div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">​</span>
+            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-md sm:w-full" role="document">
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div class="sm:flex sm:items-start">
+                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900" id="locationModalLabel">
+                                Добавить / Редактировать Локацию
+                            </h3>
+                        </div>
+                    </div>
+                    <div class="mt-2">
+                        <form id="locationForm">
+                            <input type="hidden" id="locationId" value="">
+                            <div class="mb-4">
+                                <label for="locationCity" class="block text-gray-700 text-sm font-bold mb-2">Город</label>
+                                <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="locationCity" required>
+                            </div>
+                            <div class="mb-4">
+                                <label for="locationDistrict" class="block text-gray-700 text-sm font-bold mb-2">Район</label>
+                                <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="locationDistrict" required>
+                            </div>
+                              <div id="location-error-message" class="text-red-500 mt-2 hidden"></div>
+                        </form>
+                    </div>
+                </div>
+                <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                    <button type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm" id="saveLocationButton">
+                        Сохранить
+                    </button>
+                    <button type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" onclick="closeModal('locationModal')">
+                        Отмена
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>

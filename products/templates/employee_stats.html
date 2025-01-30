@@ -1,0 +1,201 @@
+<!-- templates/employee_stats.html -->
+{% extends 'base.html' %}
+
+{% block title %}Статистика сотрудника{% endblock %}
+
+{% block page_title %}Статистика сотрудника{% endblock %}
+
+{% block content %}
+    <h2>Статистика закладок {{ session.get('username') }}</h2>
+    <a href="{{ url_for('employee_dashboard') }}" class="button button-secondary button-small mb-3">
+        Назад в личный кабинет
+    </a>
+  
+
+    <div class="card mt-4">
+        <h5 class="card-title">Общая статистика</h5>
+        <p>Итого заработано: ${{ total_earnings | format_decimal }}</p>
+         {% if stats_by_month %}
+            {% for month, month_stats in stats_by_month.items() %}
+                <div class="card mb-4">
+                    <h6 class="card-title">{{ month }}</h6>
+                        <ul class="list-disc pl-5">
+                        {% for product_name_cleaned, stats in month_stats.items() %}
+                            {% if product_name_cleaned != 'total_earnings' %}
+                                <li class="mb-2">
+                                    <span class="font-bold">{{ product_name_cleaned }}</span>
+                                    -
+                                    Количество: {{ stats.count }}
+                                    - Заработано: ${{ stats.earnings | format_decimal }}
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                    <p class="mt-2 font-bold">Общая сумма за месяц: ${{ month_stats.total_earnings | format_decimal }}</p>
+                </div>
+            {% endfor %}
+         {% else %}
+             <p>Нет данных для отображения статистики.</p>
+         {% endif %}
+    </div>
+
+<!-- templates/employee_stats.html (фрагмент формы затрат с исправленными кнопками) -->
+    <div class="card mt-5">
+        <h3 class="card-title">Внести затраты за период</h3>
+        <div id="expenses-container">
+            <!-- Шаблон для одной записи о затратах -->
+            <div class="expense-entry mb-4 border p-3 rounded">
+                <div class="mb-3">
+                    <label for="expense_date_1" class="form-label">Дата затраты</label>
+                    <input type="date" class="form-control expense-date" id="expense_date_1" name="expense_date[]" required>
+                </div>
+                <div class="mb-3">
+                    <label for="expense_description_1" class="form-label">Описание затраты</label>
+                    <input type="text" class="form-control expense-description" id="expense_description_1" name="expense_description[]" required>
+                </div>
+                <div class="mb-3">
+                    <label for="expense_amount_1" class="form-label">Сумма затраты ($)</label>
+                    <input type="number" class="form-control expense-amount" id="expense_amount_1" name="expense_amount[]" value="0" required>
+                </div>
+                 <button type="button" class="button button-primary button-small save-expense-entry-btn">Сохранить</button>
+            </div>
+        </div>
+
+        <button type="button" class="button button-primary button-small" id="add-expense-btn">Добавить еще затрату</button>
+
+    </div>
+    
+     {% if expenses %}
+        <h3 class="mt-4">Мои затраты</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Дата</th>
+                    <th>Описание</th>
+                    <th>Сумма</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for expense in expenses %}
+                <tr>
+                    <td>{{ expense.expense_date }}</td>
+                    <td>{{ expense.expense_description }}</td>
+                    <td>${{ expense.expense_amount | format_decimal }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+     {% else %}
+          <p>Нет данных о затратах.</p>
+     {% endif %}
+    
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const expensesContainer = document.getElementById('expenses-container');
+      const addExpenseBtn = document.getElementById('add-expense-btn');
+      let expenseEntryCount = 1; // Счетчик для уникальных ID
+
+      addExpenseBtn.addEventListener('click', function(event) {
+         event.preventDefault();
+         expenseEntryCount++;
+
+         const newExpenseEntry = document.createElement('div');
+         newExpenseEntry.classList.add('expense-entry', 'mb-4', 'border', 'p-3', 'rounded');
+         newExpenseEntry.innerHTML = `
+             <div class="mb-3">
+                 <label for="expense_date_${expenseEntryCount}" class="form-label">Дата затраты</label>
+                 <input type="date" class="form-control expense-date" id="expense_date_${expenseEntryCount}" name="expense_date[]" required>
+             </div>
+             <div class="mb-3">
+                 <label for="expense_description_${expenseEntryCount}" class="form-label">Описание затраты</label>
+                 <input type="text" class="form-control expense-description" id="expense_description_${expenseEntryCount}" name="expense_description[]" required>
+             </div>
+             <div class="mb-3">
+                 <label for="expense_amount_${expenseEntryCount}" class="form-label">Сумма затраты ($)</label>
+                 <input type="number" class="form-control expense-amount" id="expense_amount_${expenseEntryCount}" name="expense_amount[]" value="0" required>
+             </div>
+             <button type="button" class="button button-primary button-small save-expense-entry-btn">Сохранить</button>
+         `;
+         expensesContainer.appendChild(newExpenseEntry);
+      });
+
+     expensesContainer.addEventListener('click', function(event) {
+         if (event.target.classList.contains('save-expense-entry-btn')) {
+            event.preventDefault();
+            const expenseEntry = event.target.closest('.expense-entry');
+
+            // Получаем данные из текущей записи
+            const dateInput = expenseEntry.querySelector('.expense-date');
+            const descriptionInput = expenseEntry.querySelector('.expense-description');
+            const amountInput = expenseEntry.querySelector('.expense-amount');
+
+            const expenseData = {
+                expense_date: dateInput.value,
+                expense_description: descriptionInput.value,
+                expense_amount: amountInput.value,
+                employee_id: {{ session.get('employee_id') }} // Добавляем ID сотрудника
+            };
+
+            // Выполняем запрос
+             fetch('/save_expense', {
+                 method: 'POST',
+                 headers: {
+                    'Content-Type': 'application/json',
+                 },
+                  body: JSON.stringify(expenseData),
+                 })
+                  .then(response => response.json())
+                  .then(data => {
+                   if (data.message == 'Record saved successfully'){
+                        showNotification('Затраты сохранены!');
+                     } else {
+                         showNotification('Ошибка при сохранении затрат!', true);
+                     }
+                  })
+                  .catch((error) => {
+                      console.error('Error:', error);
+                         showNotification('Ошибка при сохранении затрат!', true);
+                  });
+             }
+      });
+          function showNotification(message, isError = false) {
+                const notification = document.createElement('div');
+                notification.textContent = message;
+                notification.style.cssText = `
+                    position: fixed;
+                    bottom: 20px;
+                    right: 20px;
+                    padding: 12px 24px;
+                    background: ${isError ? '#ef4444' : '#22c55e'};
+                    color: white;
+                    border-radius: 8px;
+                    font-family: sans-serif;
+                    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                    z-index: 1000;
+                    animation: slideIn 0.3s ease-out;
+                `;
+
+                document.body.appendChild(notification);
+
+                setTimeout(() => {
+                    notification.style.animation = 'fadeOut 0.3s ease-out';
+                    setTimeout(() => notification.remove(), 300);
+                }, 2000);
+            }
+                // Добавляем CSS анимации
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideIn {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+                @keyframes fadeOut {
+                    to { opacity: 0; }
+                }
+            `;
+            document.head.appendChild(style);
+    });
+</script>
+
+
+{% endblock %}

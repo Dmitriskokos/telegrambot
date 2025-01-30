@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Товары в {{ district_name }}, {{ city_name }}{% endblock %}
+{% block page_title %}Товары в <span class="font-semibold">{{ district_name }}, {{ city_name }}</span>{% endblock %}
+
+{% block content %}
+    <div class="mb-4 flex space-x-2">
+        <a href="{{ url_for('city_districts', city_name=city_name) }}" class="button button-secondary button-small flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18"/></svg>
+            Назад к выбору районов
+        </a>
+        <a href="{{ url_for('index') }}" class="button button-secondary button-small flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18"/></svg>
+            Назад к выбору городов
+        </a>
+    </div>
+
+    {% if product_counts %}
+        <div class="space-y-2">
+            {% for product_name_variation, count in product_counts.items() %}
+                <a href="{{ url_for('zakladki_list', city_name=city_name, district_name=district_name, product_name=product_name_variation) }}"
+                   class="product-card">
+                    <span class="product-badge">{{ count }} кладов</span>
+                    <h2 class="product-title">{{ product_name_variation }}</h2>
+                </a>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-gray-600">Нет доступных товаров в этом районе.</p>
+    {% endif %}
+{% endblock %}
